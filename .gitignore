@@ -1,0 +1,17 @@
+
+# aqua-dao-contact
+
+# Compiler files
+aqua-dao-contact/cache/
+aqua-dao-contact/out/
+
+# Ignores development broadcast logs
+aqua-dao-contact/!/broadcast
+aqua-dao-contact/broadcast/*/31337/
+aqua-dao-contact/broadcast/**/dry-run/
+
+# Docs
+aqua-dao-contact/docs/
+
+# Dotenv file
+aqua-dao-contact/.env
