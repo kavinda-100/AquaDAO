@@ -12,8 +12,8 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
  */
 contract AquaDAOTreasury is Ownable {
     // ------------------------------------ Errors ----------------------------
-    error NotEnoughETH();
-    error ETHTransferFailed();
+    error AquaDAOTreasury__NotEnoughETH();
+    error AquaDAOTreasury__ETHTransferFailed();
 
     // ------------------------------------ Events ----------------------------
     event ETHSent(address indexed to, uint256 amount);
@@ -29,9 +29,9 @@ contract AquaDAOTreasury is Ownable {
      * @param _amount The amount of ETH to send.
      */
     function sendETH(address _to, uint256 _amount) external onlyOwner {
-        if (address(this).balance < _amount) revert NotEnoughETH();
+        if (address(this).balance < _amount) revert AquaDAOTreasury__NotEnoughETH();
         (bool sent,) = payable(_to).call{value: _amount}("");
-        if (!sent) revert ETHTransferFailed();
+        if (!sent) revert AquaDAOTreasury__ETHTransferFailed();
 
         emit ETHSent(_to, _amount);
     }

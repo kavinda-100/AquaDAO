@@ -12,13 +12,18 @@ import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
  */
 contract AquaGovToken is ERC20 {
     // ------------------------ Errors ------------------------------------------------------
-    error NotEnoughETHSent(uint256 sent, uint256 required);
+    error AquaGovToken__NotEnoughETHSent(uint256 sent, uint256 required);
+    error AquaGovToken__TreasuryTransferFailed();
 
     // -------------------- state variables -----------------------------------------------------
     uint256 private constant MINT_PRICE = 1 wei;
+    address payable private s_treasury;
 
     // -------------------- constructor ----------------------------------------------------------
-    constructor() ERC20("Aqua Governance Token", "AQUA") {}
+    constructor(address _treasury) ERC20("Aqua Governance Token", "AQUA") {
+        // Set the treasury address
+        s_treasury = payable(_treasury);
+    }
 
     // -------------------- External/Public functions ---------------------------------------------------
 
@@ -31,11 +36,16 @@ contract AquaGovToken is ERC20 {
         uint256 cost = _amount * MINT_PRICE;
         // check if enough ETH was sent
         if (msg.value < cost) {
-            revert NotEnoughETHSent(msg.value, cost);
+            revert AquaGovToken__NotEnoughETHSent(msg.value, cost);
         }
         // mint the tokens
         _mint(msg.sender, _amount);
-        // Send ETH to DAO Treasury (if set up)
+
+        // Send ETH to DAO Treasury
+        (bool sent,) = s_treasury.call{value: msg.value}("");
+        if (!sent) {
+            revert AquaGovToken__TreasuryTransferFailed();
+        }
     }
 
     // -------------------- View functions ---------------------------------------------------
