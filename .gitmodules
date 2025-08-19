@@ -1,3 +1,6 @@
 [submodule "aqua-dao-contact/lib/forge-std"]
 	path = aqua-dao-contact/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "aqua-dao-contact/lib/openzeppelin-contracts"]
+	path = aqua-dao-contact/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
