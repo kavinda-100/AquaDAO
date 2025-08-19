@@ -15,7 +15,13 @@ contract AquaDAOTreasury is Ownable {
     error NotEnoughETH();
     error ETHTransferFailed();
 
+    // ------------------------------------ Events ----------------------------
+    event ETHSent(address indexed to, uint256 amount);
+
+    // ------------------------------------ Constructor ----------------------------
     constructor() Ownable(msg.sender) {}
+
+    // -------------------------------- External/Public Functions ----------------------------
 
     /**
      * @dev Sends ETH from the treasury to a specified address.
@@ -26,6 +32,8 @@ contract AquaDAOTreasury is Ownable {
         if (address(this).balance < _amount) revert NotEnoughETH();
         (bool sent,) = payable(_to).call{value: _amount}("");
         if (!sent) revert ETHTransferFailed();
+
+        emit ETHSent(_to, _amount);
     }
 
     /**
