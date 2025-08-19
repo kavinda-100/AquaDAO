@@ -2,7 +2,6 @@
 pragma solidity ^0.8.24;
 
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {AquaDAOTreasury} from "./AquaDAOTreasury.sol";
 
 /**
@@ -12,11 +11,13 @@ import {AquaDAOTreasury} from "./AquaDAOTreasury.sol";
  * @dev The AquaDAO contract is the main entry point for interacting with the Aqua DAO.
  * @dev This contract implements the functionality of creating proposals, voting, and executing proposals.
  */
-contract AquaDAO is Ownable {
+contract AquaDAO {
     // ------------------------ Errors ----------------------------
     error AquaDAO__ProposalDoesNotExist();
     error AquaDAO__VotingPeriodHasEnded();
     error AquaDAO__AlreadyVoted();
+    error AquaDAO__AlreadyExecutedProposal();
+    error AquaDAO__ProposalHasFailed();
 
     // ------------------------ Events ----------------------------
     event ProposalCreated(uint256 id, string description, uint256 deadline);
@@ -36,6 +37,7 @@ contract AquaDAO is Ownable {
         uint256 votesAgainst;
         uint256 deadline;
         bool executed;
+        bool isProposalHasPassed; // Indicates if the proposal has passed
         mapping(address => bool) voted;
     } // proposal
 
@@ -47,17 +49,31 @@ contract AquaDAO is Ownable {
         uint256 votesAgainst; // number of votes against the proposal
         uint256 deadline; // deadline for voting
         bool executed; // whether the proposal has been executed
+        bool isProposalHasPassed; // Indicates if the proposal has passed
     } // proposal for display in the UI
 
     mapping(uint256 => Proposal) public proposals; // proposal ID to Proposal mapping
     uint256[] private allProposals; // Array of all proposal IDs
 
     // ---------------------- Constructor ----------------------
-    constructor(address _treasury, address _governanceToken) Ownable(msg.sender) {
+    constructor(address _treasury, address _governanceToken) {
         // set the Aqua Governance Treasury
         s_treasury = AquaDAOTreasury(payable(_treasury));
         // set the Aqua Governance Token
         s_AquaGovToken = ERC20(_governanceToken);
+    }
+
+    // --------------------- Modifiers ---------------------
+
+    /**
+     * @dev Modifier to check if a proposal exists.
+     * @param _proposalId The ID of the proposal to check.
+     */
+    modifier onlyExistingProposal(uint256 _proposalId) {
+        if (_proposalId > s_proposalCount || _proposalId == 0) {
+            revert AquaDAO__ProposalDoesNotExist();
+        }
+        _;
     }
 
     // ---------------------- External/Public functions ----------------------
@@ -67,7 +83,7 @@ contract AquaDAO is Ownable {
      * @param _description The description of the proposal.
      * @param _duration The duration of the proposal in days (e.g. 7 -> 7 days).
      */
-    function createProposal(string memory _description, uint256 _duration) external {
+    function createProposal(string calldata _description, uint256 _duration) external {
         s_proposalCount++; // Increment proposal count
 
         // Create a new proposal
@@ -77,19 +93,21 @@ contract AquaDAO is Ownable {
         newProposal.description = _description;
         newProposal.deadline = block.timestamp + (_duration * 1 days);
         newProposal.executed = false;
+        newProposal.isProposalHasPassed = false; // Initialize as not passed
 
         // Add the new proposal to the allProposals array
-        allProposals.push(s_proposalCount);
+        allProposals.push(newProposal.id);
 
         // emit the ProposalCreated event
         emit ProposalCreated(s_proposalCount, _description, newProposal.deadline);
     }
 
-    function vote(uint256 _proposalId, bool _support) external {
-        // Check if the proposal exists and is active
-        if (_proposalId > s_proposalCount || _proposalId == 0) {
-            revert AquaDAO__ProposalDoesNotExist();
-        }
+    /**
+     * @dev Votes on a proposal.
+     * @param _proposalId The ID of the proposal to vote on.
+     * @param _support Whether the vote is in support (true) or against (false) the proposal.
+     */
+    function vote(uint256 _proposalId, bool _support) external onlyExistingProposal(_proposalId) {
         // Get the proposal
         Proposal storage proposal = proposals[_proposalId];
         // Check if the proposal is active
@@ -111,6 +129,100 @@ contract AquaDAO is Ownable {
 
         // emit the Voted event
         emit Voted(_proposalId, msg.sender, _support);
+    }
+
+    /**
+     * @dev Executes a proposal.
+     * @param _proposalId The ID of the proposal to execute.
+     */
+    function executeTheProposal(uint256 _proposalId) external onlyExistingProposal(_proposalId) {
+        // Get the proposal
+        Proposal storage proposal = proposals[_proposalId];
+        // Check if the proposal is active
+        if (block.timestamp > proposal.deadline) {
+            revert AquaDAO__ProposalHasFailed();
+        }
+        // Check if the proposal has already been executed
+        if (proposal.executed) {
+            revert AquaDAO__AlreadyExecutedProposal();
+        }
+
+        // Mark the proposal as executed
+        proposal.executed = true;
+        // Check if the proposal has passed
+        if (proposal.votesFor > proposal.votesAgainst) {
+            proposal.isProposalHasPassed = true;
+        }
+
+        // emit the ProposalExecuted event
+        emit ProposalExecuted(_proposalId);
+    }
+
+    // ------------------------------------ View functions --------------------------------
+
+    /**
+     * @dev Returns the details of a specific proposal.
+     * @param _proposalId The ID of the proposal to retrieve.
+     */
+    function getProposalDetail(uint256 _proposalId)
+        external
+        view
+        onlyExistingProposal(_proposalId)
+        returns (ProposalForDisplay memory)
+    {
+        Proposal storage proposal = proposals[_proposalId];
+        return ProposalForDisplay({
+            id: proposal.id,
+            proposer: proposal.proposer,
+            description: proposal.description,
+            votesFor: proposal.votesFor,
+            votesAgainst: proposal.votesAgainst,
+            deadline: proposal.deadline,
+            executed: proposal.executed,
+            isProposalHasPassed: proposal.isProposalHasPassed
+        });
+    }
+
+    /**
+     * @dev Returns whether a specific proposal has passed.
+     * @param _proposalId The ID of the proposal to check.
+     */
+    function getIsProposalHasPassed(uint256 _proposalId)
+        external
+        view
+        onlyExistingProposal(_proposalId)
+        returns (bool)
+    {
+        return proposals[_proposalId].isProposalHasPassed;
+    }
+
+    /**
+     * @dev Returns the total number of proposals.
+     * @return The total number of proposals.
+     */
+    function getTotalProposalsCount() external view returns (uint256) {
+        return allProposals.length;
+    }
+
+    /**
+     * @dev Returns an array of active proposals.
+     */
+    function getActiveProposals() external view returns (ProposalForDisplay[] memory) {
+        return _getActiveProposals();
+    }
+
+    /**
+     * @dev Returns an array of executed proposals.
+     */
+    function getExecutedProposals() external view returns (ProposalForDisplay[] memory) {
+        return _getExecutedProposals();
+    }
+
+    /**
+     * @dev Returns an array of failed proposals.
+     */
+    function getFailedProposals() external view returns (ProposalForDisplay[] memory) {
+        return _getFailedProposals();
     }
 
     // ----------------------------------- internal functions -------------------------------
@@ -140,7 +252,8 @@ contract AquaDAO is Ownable {
                     votesFor: proposals[allProposals[i]].votesFor,
                     votesAgainst: proposals[allProposals[i]].votesAgainst,
                     deadline: proposals[allProposals[i]].deadline,
-                    executed: proposals[allProposals[i]].executed
+                    executed: proposals[allProposals[i]].executed,
+                    isProposalHasPassed: proposals[allProposals[i]].isProposalHasPassed
                 });
                 index++;
             }
@@ -173,7 +286,8 @@ contract AquaDAO is Ownable {
                     votesFor: proposals[allProposals[i]].votesFor,
                     votesAgainst: proposals[allProposals[i]].votesAgainst,
                     deadline: proposals[allProposals[i]].deadline,
-                    executed: proposals[allProposals[i]].executed
+                    executed: proposals[allProposals[i]].executed,
+                    isProposalHasPassed: proposals[allProposals[i]].isProposalHasPassed
                 });
                 index++;
             }
@@ -182,7 +296,7 @@ contract AquaDAO is Ownable {
     }
 
     /**
-     * @dev Returns an array of failed proposals (expired but not executed).
+     * @dev Returns an array of failed proposals (deadline has passed and not executed).
      */
     function _getFailedProposals() internal view returns (ProposalForDisplay[] memory) {
         // First, count the number of failed proposals
@@ -206,7 +320,8 @@ contract AquaDAO is Ownable {
                     votesFor: proposals[allProposals[i]].votesFor,
                     votesAgainst: proposals[allProposals[i]].votesAgainst,
                     deadline: proposals[allProposals[i]].deadline,
-                    executed: proposals[allProposals[i]].executed
+                    executed: proposals[allProposals[i]].executed,
+                    isProposalHasPassed: proposals[allProposals[i]].isProposalHasPassed
                 });
                 index++;
             }
