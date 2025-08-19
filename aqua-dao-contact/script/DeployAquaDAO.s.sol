@@ -32,6 +32,8 @@ contract DeployAquaDAO is Script {
         console2.log("AquaDAO deployed at:", address(aquaDAO));
         console2.log("================================================================");
 
+        _writeDeploymentSummaryToJson(address(treasury), address(governanceToken), address(aquaDAO));
+
         return (treasury, governanceToken, aquaDAO);
     }
 
@@ -48,10 +50,13 @@ contract DeployAquaDAO is Script {
         // Add deployment information to JSON
         vm.serializeString(json, "contract_name", "AquaDAOTreasury");
         vm.serializeAddress(json, "contract_address", _treasury);
+        vm.serializeString(json, "-----------------", "----------------------");
         vm.serializeString(json, "contract_name", "AquaDAOToken");
         vm.serializeAddress(json, "contract_address", _governanceToken);
+        vm.serializeString(json, "-----------------", "----------------------");
         vm.serializeString(json, "contract_name", "AquaDAO");
         vm.serializeAddress(json, "contract_address", _aquaDAO);
+        vm.serializeString(json, "-----------------", "----------------------");
         vm.serializeUint(json, "deployment_timestamp", block.timestamp);
         vm.serializeUint(json, "block_number", block.number);
         vm.serializeUint(json, "chain_id", block.chainid);
