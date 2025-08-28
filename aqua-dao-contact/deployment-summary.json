@@ -1,0 +1,9 @@
+{
+  "-----------------": "----------------------",
+  "block_number": 1,
+  "chain_id": 31337,
+  "contract_address": "0xA8452Ec99ce0C64f20701dB7dD3abDb607c00496",
+  "contract_name": "AquaDAO",
+  "deployment_timestamp": 1,
+  "status": "deployed_successfully"
+}
