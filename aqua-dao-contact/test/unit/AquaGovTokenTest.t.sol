@@ -42,4 +42,23 @@ contract AquaGovTokenTest is Test {
         // check final balance
         assertEq(aquaGovToken.balanceOf(user1), mintAmount);
     }
+
+    /**
+     * Tests the minting of tokens with insufficient payment.
+     */
+    function test_mintTokens_with_insufficientPayment() public {
+        uint256 mintAmount = 5; // number of tokens to mint
+        uint256 insufficientPayment = (mintAmount * aquaGovToken.getMintPrice()) - 1; // insufficient payment
+
+        // attempt to mint tokens with insufficient payment
+        vm.prank(user1);
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                AquaGovToken.AquaGovToken__NotEnoughETHSent.selector,
+                insufficientPayment,
+                mintAmount * aquaGovToken.getMintPrice()
+            )
+        );
+        aquaGovToken.mint{value: insufficientPayment}(mintAmount);
+    }
 }
