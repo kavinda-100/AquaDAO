@@ -2,8 +2,8 @@
 pragma solidity ^0.8.24;
 
 import {Test, console2} from "forge-std/Test.sol";
-import {DeployAquaDAO} from "../../script/DeployAquaDAO.s.sol";
 import {AquaGovToken} from "../../src/AquaGovToken.sol";
+import {AquaDAOTreasury} from "../../src/AquaDAOTreasury.sol";
 
 contract AquaGovTokenFuzzTest is Test {
     // ---------------------- State Variables ---------------------------------
@@ -11,10 +11,14 @@ contract AquaGovTokenFuzzTest is Test {
 
     // ---------------------- Set Up ---------------------------------
     function setUp() public {
-        // deploy AquaGov
-        DeployAquaDAO deployAquaDAO = new DeployAquaDAO();
-        // store the deployed AquaGovToken
-        (, aquaGovToken,) = deployAquaDAO.run();
+        vm.startBroadcast();
+        // 1. deploy treasury
+        AquaDAOTreasury treasury = new AquaDAOTreasury();
+
+        // 2. deploy governance token
+        aquaGovToken = new AquaGovToken(address(treasury));
+
+        vm.stopBroadcast();
     }
 
     // ------------------------ Fuzz Tests for mint tokens ---------------------------------
