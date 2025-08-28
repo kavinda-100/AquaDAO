@@ -2,6 +2,7 @@
 pragma solidity ^0.8.24;
 
 import {Test, console2} from "forge-std/Test.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {DeployAquaDAO} from "../../script/DeployAquaDAO.s.sol";
 import {AquaGovToken} from "../../src/AquaGovToken.sol";
 import {AquaDAOTreasury} from "../../src/AquaDAOTreasury.sol";
@@ -13,6 +14,9 @@ contract AquaDAOTreasuryTest is Test {
     address public user1 = makeAddr("user1");
     address public user2 = makeAddr("user2");
     uint256 public initialUserBalance = 10 ether;
+
+    // ------------------------------------ Events ----------------------------
+    event ETHSent(address indexed to, uint256 amount);
 
     // ---------------------- Set Up ---------------------------------
     function setUp() public {
@@ -71,5 +75,67 @@ contract AquaDAOTreasuryTest is Test {
         // check final balances
         assertEq(address(aquaDAOTreasury).balance, mintCost - sendAmount);
         assertEq(recipient.balance, sendAmount);
+    }
+
+    /**
+     * Tests that sending ETH from the treasury by a non-owner fails.
+     */
+    function test_sendEth_by_non_owner_fails() public {
+        address nonOwner = user2;
+        address recipient = makeAddr("recipient");
+        uint256 mintAmount = 5;
+        uint256 mintCost = mintAmount * aquaGovToken.getMintPrice();
+        uint256 sendAmount = mintCost / 2;
+
+        // mint tokens
+        vm.startPrank(user1);
+        aquaGovToken.mint{value: mintCost}(mintAmount);
+        vm.stopPrank();
+
+        // attempt to send eth to recipient by non-owner
+        vm.startPrank(nonOwner);
+        vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, nonOwner));
+        aquaDAOTreasury.sendETH(recipient, sendAmount);
+        vm.stopPrank();
+    }
+
+    /**
+     * Tests the ability emit an event when ETH is sent from the treasury.
+     */
+    function test_sendEth_emit_event() public {
+        address owner = aquaDAOTreasury.owner();
+        address recipient = makeAddr("recipient");
+        uint256 mintAmount = 5;
+        uint256 mintCost = mintAmount * aquaGovToken.getMintPrice();
+        uint256 sendAmount = mintCost / 2;
+
+        // mint tokens
+        vm.startPrank(user1);
+        aquaGovToken.mint{value: mintCost}(mintAmount);
+        vm.stopPrank();
+
+        // expect event to be emitted
+        vm.expectEmit(true, true, true, true);
+        emit ETHSent(recipient, sendAmount);
+
+        // send eth to recipient
+        vm.startPrank(owner);
+        aquaDAOTreasury.sendETH(recipient, sendAmount);
+        vm.stopPrank();
+    }
+
+    /**
+     * Tests that sending ETH from the treasury fails when there is not enough ETH.
+     */
+    function test_notEnoughEthInTreasury_fails() public {
+        address owner = aquaDAOTreasury.owner();
+        address recipient = makeAddr("recipient");
+        uint256 sendAmount = 1 ether; // trying to send 1 ether from an empty treasury
+
+        // attempt to send eth to recipient by owner
+        vm.startPrank(owner);
+        vm.expectRevert(abi.encodeWithSelector(AquaDAOTreasury.AquaDAOTreasury__NotEnoughETH.selector));
+        aquaDAOTreasury.sendETH(recipient, sendAmount);
+        vm.stopPrank();
     }
 }
