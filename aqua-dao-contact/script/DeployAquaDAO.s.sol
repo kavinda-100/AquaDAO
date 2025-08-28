@@ -48,15 +48,9 @@ contract DeployAquaDAO is Script {
         string memory json = "deployment_summary";
 
         // Add deployment information to JSON
-        vm.serializeString(json, "contract_name", "AquaDAOTreasury");
-        vm.serializeAddress(json, "contract_address", _treasury);
-        vm.serializeString(json, "-----------------", "----------------------");
-        vm.serializeString(json, "contract_name", "AquaDAOToken");
-        vm.serializeAddress(json, "contract_address", _governanceToken);
-        vm.serializeString(json, "-----------------", "----------------------");
-        vm.serializeString(json, "contract_name", "AquaDAO");
-        vm.serializeAddress(json, "contract_address", _aquaDAO);
-        vm.serializeString(json, "-----------------", "----------------------");
+        vm.serializeAddress(json, "aqua_dao_treasury_address", _treasury);
+        vm.serializeAddress(json, "aqua_gov_token_address", _governanceToken);
+        vm.serializeAddress(json, "aqua_dao_address", _aquaDAO);
         vm.serializeUint(json, "deployment_timestamp", block.timestamp);
         vm.serializeUint(json, "block_number", block.number);
         vm.serializeUint(json, "chain_id", block.chainid);
