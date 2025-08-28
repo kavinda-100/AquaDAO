@@ -47,4 +47,38 @@ contract AquaDAOTreasuryFuzzTest is Test {
         assertEq(address(aquaDAOTreasury).balance, mintCost);
         vm.stopPrank();
     }
+
+    /**
+     * Fuzz Tests the ability of the owner to send ETH from the treasury.
+     * @param _recipient The address of the recipient
+     * @param _user The address of the user
+     * @param _mintAmount The amount of tokens to mint
+     */
+    function test_fuzz_sendEth_by_owner(address _recipient, address _user, uint256 _mintAmount) public {
+        address owner = aquaDAOTreasury.owner();
+        // setup
+        vm.assume(_user != address(0)); // avoid zero address
+        vm.assume(_recipient != address(0)); // avoid zero address
+        _mintAmount = bound(_mintAmount, 1, 100); // limit the amount to a reasonable range
+        uint256 mintCost = _mintAmount * aquaGovToken.getMintPrice(); // cost to mint tokens
+        uint256 sendAmount = mintCost / 2;
+        vm.deal(_user, mintCost + 1 ether); // fund user with enough Ether to cover minting cost
+
+        // mint tokens
+        vm.startPrank(_user);
+        aquaGovToken.mint{value: mintCost}(_mintAmount);
+        vm.stopPrank();
+
+        // check recipient balance
+        assertEq(_recipient.balance, 0);
+
+        // send eth to recipient
+        vm.startPrank(owner);
+        aquaDAOTreasury.sendETH(_recipient, sendAmount);
+        vm.stopPrank();
+
+        // check final balances
+        assertEq(address(aquaDAOTreasury).balance, mintCost - sendAmount);
+        assertEq(_recipient.balance, sendAmount);
+    }
 }
