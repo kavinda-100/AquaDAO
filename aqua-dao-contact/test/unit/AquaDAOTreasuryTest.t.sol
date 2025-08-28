@@ -7,6 +7,15 @@ import {DeployAquaDAO} from "../../script/DeployAquaDAO.s.sol";
 import {AquaGovToken} from "../../src/AquaGovToken.sol";
 import {AquaDAOTreasury} from "../../src/AquaDAOTreasury.sol";
 
+/**
+ * @notice Helper contract that rejects all Ether transfers
+ * This is used to test transfer failure scenarios
+ */
+contract RejectEther {
+// This contract will reject all Ether transfers by not having a receive or fallback function
+// It can send Ether but cannot receive it
+}
+
 contract AquaDAOTreasuryTest is Test {
     // ---------------------- State Variables ---------------------------------
     AquaDAOTreasury aquaDAOTreasury;
@@ -136,6 +145,28 @@ contract AquaDAOTreasuryTest is Test {
         vm.startPrank(owner);
         vm.expectRevert(abi.encodeWithSelector(AquaDAOTreasury.AquaDAOTreasury__NotEnoughETH.selector));
         aquaDAOTreasury.sendETH(recipient, sendAmount);
+        vm.stopPrank();
+    }
+
+    /**
+     * Tests that sending ETH to a recipient that rejects ETH transfers fails.
+     */
+    function test_rejectEthTransferToRecipient_fails() public {
+        address owner = aquaDAOTreasury.owner();
+        RejectEther rejectEther = new RejectEther(); // recipient that rejects ETH transfers
+        uint256 mintAmount = 5;
+        uint256 mintCost = mintAmount * aquaGovToken.getMintPrice();
+        uint256 sendAmount = mintCost / 2;
+
+        // mint tokens
+        vm.startPrank(user1);
+        aquaGovToken.mint{value: mintCost}(mintAmount);
+        vm.stopPrank();
+
+        // attempt to send eth to recipient that rejects ETH transfers
+        vm.startPrank(owner);
+        vm.expectRevert(AquaDAOTreasury.AquaDAOTreasury__ETHTransferFailed.selector);
+        aquaDAOTreasury.sendETH(address(rejectEther), sendAmount);
         vm.stopPrank();
     }
 }

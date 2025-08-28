@@ -32,7 +32,7 @@ contract DeployAquaDAO is Script {
         console2.log("AquaDAO deployed at:", address(aquaDAO));
         console2.log("================================================================");
 
-        _writeDeploymentSummaryToJson(address(treasury), address(governanceToken), address(aquaDAO));
+        // _writeDeploymentSummaryToJson(address(treasury), address(governanceToken), address(aquaDAO));
 
         return (treasury, governanceToken, aquaDAO);
     }
