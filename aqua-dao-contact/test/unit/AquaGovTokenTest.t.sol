@@ -5,6 +5,15 @@ import {Test, console2} from "forge-std/Test.sol";
 import {DeployAquaDAO} from "../../script/DeployAquaDAO.s.sol";
 import {AquaGovToken} from "../../src/AquaGovToken.sol";
 
+/**
+ * @notice Helper contract that rejects all Ether transfers
+ * This is used to test transfer failure scenarios
+ */
+contract RejectEther {
+// This contract will reject all Ether transfers by not having a receive or fallback function
+// It can send Ether but cannot receive it
+}
+
 contract AquaGovTokenTest is Test {
     // ---------------------- State Variables ---------------------------------
     AquaGovToken aquaGovToken;
@@ -60,5 +69,25 @@ contract AquaGovTokenTest is Test {
             )
         );
         aquaGovToken.mint{value: insufficientPayment}(mintAmount);
+    }
+
+    /**
+     * Tests the treasury transfer failure scenario.
+     * This test creates a governance token with a treasury that rejects ETH transfers.
+     */
+    function test_mintTokens_treasuryTransferFails() public {
+        // Deploy a contract that rejects ETH transfers
+        RejectEther rejectEther = new RejectEther();
+
+        // Deploy a new governance token with the RejectEther contract as treasury
+        AquaGovToken tokenWithRejectTreasury = new AquaGovToken(address(rejectEther));
+
+        uint256 mintAmount = 5; // number of tokens to mint
+        uint256 mintCost = mintAmount * tokenWithRejectTreasury.getMintPrice(); // cost to mint tokens
+
+        // attempt to mint tokens - should fail because treasury rejects ETH
+        vm.prank(user1);
+        vm.expectRevert(AquaGovToken.AquaGovToken__TreasuryTransferFailed.selector);
+        tokenWithRejectTreasury.mint{value: mintCost}(mintAmount);
     }
 }
