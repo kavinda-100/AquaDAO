@@ -1,0 +1,45 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+import {Test, console2} from "forge-std/Test.sol";
+import {DeployAquaDAO} from "../../script/DeployAquaDAO.s.sol";
+import {AquaGovToken} from "../../src/AquaGovToken.sol";
+
+contract AquaGovTokenFuzzTest is Test {
+    // ---------------------- State Variables ---------------------------------
+    AquaGovToken aquaGovToken;
+
+    // ---------------------- Set Up ---------------------------------
+    function setUp() public {
+        // deploy AquaGov
+        DeployAquaDAO deployAquaDAO = new DeployAquaDAO();
+        // store the deployed AquaGovToken
+        (, aquaGovToken,) = deployAquaDAO.run();
+    }
+
+    // ------------------------ Fuzz Tests for mint tokens ---------------------------------
+
+    /**
+     * @dev Fuzz test for minting tokens
+     * @param _user The address of the user minting tokens
+     * @param _amount The amount of tokens to mint
+     */
+    function test_fuzz_mintTokens(address _user, uint256 _amount) public {
+        // setup
+        vm.assume(_user != address(0)); // avoid zero address
+        _amount = bound(_amount, 1, 100); // limit the amount to a reasonable range
+        uint256 mintCost = _amount * aquaGovToken.getMintPrice(); // cost to mint tokens
+        vm.deal(_user, mintCost + 1 ether); // fund user with enough Ether to cover minting cost
+
+        vm.startPrank(_user);
+        // check initial balance
+        assertEq(aquaGovToken.balanceOf(_user), 0);
+
+        // mint tokens
+        aquaGovToken.mint{value: mintCost}(_amount);
+
+        // check final balance
+        assertEq(aquaGovToken.balanceOf(_user), _amount);
+        vm.stopPrank();
+    }
+}
