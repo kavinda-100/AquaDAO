@@ -162,4 +162,15 @@ contract AquaDAOTest is Test {
         aquaDAO.vote(1, false);
         vm.stopPrank();
     }
+
+    /**
+     * Test voting on a non-existent proposal
+     */
+    function test_can_not_vote_if_proposal_does_not_exist() public {
+        vm.startPrank(user2);
+        // Attempt to vote on a non-existent proposal
+        vm.expectRevert(AquaDAO.AquaDAO__ProposalDoesNotExist.selector);
+        aquaDAO.vote(999, true); // Assuming proposal ID 999 does not exist
+        vm.stopPrank();
+    }
 }
