@@ -305,4 +305,20 @@ contract AquaDAOTest is Test {
         aquaDAO.executeTheProposal(999); // Assuming proposal ID 999 does not exist
         vm.stopPrank();
     }
+
+    /**
+     * Test that only the owner of the proposal can execute it
+     */
+    function test_only_owner_can_execute_the_proposal()
+        public
+        createProposal(user1)
+        voteFor(5) // 5 votes for
+        voteAgainst(2) // 2 votes against
+    {
+        // Attempt to execute the proposal by a non-owner
+        vm.startPrank(user2); // user2 is not the proposer
+        vm.expectRevert(AquaDAO.AquaDAO__NotProposalOwner.selector);
+        aquaDAO.executeTheProposal(1);
+        vm.stopPrank();
+    }
 }

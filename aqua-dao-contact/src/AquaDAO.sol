@@ -17,6 +17,7 @@ contract AquaDAO {
     error AquaDAO__VotingPeriodHasEnded();
     error AquaDAO__AlreadyVoted();
     error AquaDAO__AlreadyExecutedProposal();
+    error AquaDAO__NotProposalOwner();
 
     // ------------------------ Events ----------------------------
     event ProposalCreated(uint256 id, string description, uint256 deadline);
@@ -71,6 +72,18 @@ contract AquaDAO {
     modifier onlyExistingProposal(uint256 _proposalId) {
         if (_proposalId > s_proposalCount || _proposalId == 0) {
             revert AquaDAO__ProposalDoesNotExist();
+        }
+        _;
+    }
+
+    /**
+     * @dev Modifier to check if the caller is the owner of the proposal.
+     * @param _proposalId The ID of the proposal to check.
+     */
+    modifier onlyOwnerCanExecute(uint256 _proposalId) {
+        address owner = proposals[_proposalId].proposer;
+        if (msg.sender != owner) {
+            revert AquaDAO__NotProposalOwner();
         }
         _;
     }
@@ -134,7 +147,11 @@ contract AquaDAO {
      * @dev Executes a proposal.
      * @param _proposalId The ID of the proposal to execute.
      */
-    function executeTheProposal(uint256 _proposalId) external onlyExistingProposal(_proposalId) {
+    function executeTheProposal(uint256 _proposalId)
+        external
+        onlyExistingProposal(_proposalId)
+        onlyOwnerCanExecute(_proposalId)
+    {
         // Get the proposal
         Proposal storage proposal = proposals[_proposalId];
         // Check if the proposal has already been executed
