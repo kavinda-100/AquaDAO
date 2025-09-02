@@ -115,7 +115,7 @@ forge coverage
 
 2. **Deploy contracts** (with deployment summary)
    ```bash
-   isDev=true forge script script/DeployAquaDAO.s.sol --rpc-url http://127.0.0.1:8545 --private-key <private_key> --broadcast
+   isDev=false forge script script/DeployAquaDAO.s.sol --rpc-url http://127.0.0.1:8545 --private-key <private_key> --broadcast
    ```
 
 ### Production Deployment
