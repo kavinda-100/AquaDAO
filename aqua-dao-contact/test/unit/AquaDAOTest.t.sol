@@ -135,4 +135,17 @@ contract AquaDAOTest is Test {
         // check if user2 has voted (check the mapping update with user address)
         assertEq(aquaDAO.getIsHasVoted(1, user2), true);
     }
+
+    /**
+     * Test voting emits events
+     */
+    function test_vote_emitsEvents() public createProposal(user1) {
+        vm.startPrank(user2);
+        // Expect event
+        vm.expectEmit(true, true, true, true);
+        emit Voted(1, user2, true);
+        // Vote
+        aquaDAO.vote(1, true);
+        vm.stopPrank();
+    }
 }
