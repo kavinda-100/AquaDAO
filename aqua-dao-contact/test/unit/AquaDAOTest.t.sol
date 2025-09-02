@@ -148,4 +148,18 @@ contract AquaDAOTest is Test {
         aquaDAO.vote(1, true);
         vm.stopPrank();
     }
+
+    /**
+     * Test that a user cannot vote twice on the same proposal
+     */
+    function test_can_not_vote_twice() public createProposal(user1) {
+        vm.startPrank(user2);
+        // First vote
+        aquaDAO.vote(1, true);
+
+        // Attempt to vote again
+        vm.expectRevert(AquaDAO.AquaDAO__AlreadyVoted.selector);
+        aquaDAO.vote(1, false);
+        vm.stopPrank();
+    }
 }
