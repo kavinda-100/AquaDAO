@@ -254,4 +254,23 @@ contract AquaDAOTest is Test {
         AquaDAO.ProposalForDisplay[] memory failedProposals = aquaDAO.getFailedProposals();
         assertEq(failedProposals.length, 0);
     }
+
+    /**
+     * Test executing a proposal emits events
+     */
+    function test_execute_proposal_emits_events()
+        public
+        createProposal(user1)
+        voteFor(5) // 5 votes for
+        voteAgainst(2) // 2 votes against
+    {
+        // Expect event
+        vm.expectEmit(true, true, true, true);
+        emit ProposalExecuted(1);
+
+        // Execute the proposal
+        vm.startPrank(user1); // assuming user1 is the proposer and can execute
+        aquaDAO.executeTheProposal(1);
+        vm.stopPrank();
+    }
 }
