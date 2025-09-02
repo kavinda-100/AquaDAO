@@ -32,7 +32,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <main className="mx-auto min-h-screen max-w-[2000px]">
+            {children}
+          </main>
         </ThemeProvider>
       </body>
     </html>
