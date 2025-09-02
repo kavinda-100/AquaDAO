@@ -1,9 +1,11 @@
 import "@/styles/globals.css";
+import "@rainbow-me/rainbowkit/styles.css";
 
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
 
 import { ThemeProvider } from "@/providers/ThemeProvider";
+import WebThreeProvider from "@/providers/WebThreeProvider";
 
 export const metadata: Metadata = {
   title: "Aqua DAO",
@@ -32,9 +34,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="mx-auto min-h-screen max-w-[2000px]">
-            {children}
-          </main>
+          <WebThreeProvider>
+            <main className="mx-auto min-h-screen max-w-[2000px]">
+              {children}
+            </main>
+          </WebThreeProvider>
         </ThemeProvider>
       </body>
     </html>
