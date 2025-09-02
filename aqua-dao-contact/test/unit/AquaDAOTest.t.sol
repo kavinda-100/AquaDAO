@@ -273,4 +273,36 @@ contract AquaDAOTest is Test {
         aquaDAO.executeTheProposal(1);
         vm.stopPrank();
     }
+
+    /**
+     * Test that a user cannot execute a proposal that has already been executed
+     */
+    function test_can_not_execute_if_already_executed()
+        public
+        createProposal(user1)
+        voteFor(5) // 5 votes for
+        voteAgainst(2) // 2 votes against
+    {
+        // Execute the proposal first time
+        vm.startPrank(user1); // assuming user1 is the proposer and can execute
+        aquaDAO.executeTheProposal(1);
+        vm.stopPrank();
+
+        // Attempt to execute the proposal again
+        vm.startPrank(user1);
+        vm.expectRevert(AquaDAO.AquaDAO__AlreadyExecutedProposal.selector);
+        aquaDAO.executeTheProposal(1);
+        vm.stopPrank();
+    }
+
+    /**
+     * Test that a user cannot execute a proposal that does not exist
+     */
+    function test_can_not_execute_if_proposal_does_not_exist() public {
+        vm.startPrank(user1);
+        // Attempt to execute a non-existent proposal
+        vm.expectRevert(AquaDAO.AquaDAO__ProposalDoesNotExist.selector);
+        aquaDAO.executeTheProposal(999); // Assuming proposal ID 999 does not exist
+        vm.stopPrank();
+    }
 }
