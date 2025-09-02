@@ -183,6 +183,15 @@ contract AquaDAO {
         });
     }
 
+    function getIsHasVoted(uint256 _proposalId, address _voter)
+        external
+        view
+        onlyExistingProposal(_proposalId)
+        returns (bool)
+    {
+        return proposals[_proposalId].voted[_voter];
+    }
+
     /**
      * @dev Returns whether a specific proposal has passed.
      * @param _proposalId The ID of the proposal to check.

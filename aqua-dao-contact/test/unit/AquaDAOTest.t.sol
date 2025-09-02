@@ -27,6 +27,20 @@ contract AquaDAOTest is Test {
         vm.deal(user2, initialUserBalance);
     }
 
+    // ------------------------ Modifiers ----------------------------
+
+    /**
+     * Modifier to create a proposal
+     */
+    modifier createProposal(address _creator) {
+        string memory description = "Proposal 1: Increase budget for project X";
+        uint256 proposalDuration = 3; // `createProposal` function covert this number to days (eg:- 3 -> 3 days)
+        vm.startPrank(_creator);
+        aquaDAO.createProposal(description, proposalDuration);
+        vm.stopPrank();
+        _;
+    }
+
     // ------------------------ Tests for create proposal ---------------------------------
 
     /**
@@ -84,5 +98,41 @@ contract AquaDAOTest is Test {
         vm.startPrank(user1);
         aquaDAO.createProposal(description, proposalDuration);
         vm.stopPrank();
+    }
+
+    // --------------------------------------- Tests for vote ---------------------------------------
+
+    /**
+     * Test voting on a proposal in support
+     */
+    function test_vote_by_support() public createProposal(user1) {
+        vm.startPrank(user2);
+        aquaDAO.vote(1, true);
+        vm.stopPrank();
+
+        // Check proposal details
+        AquaDAO.ProposalForDisplay memory proposal = aquaDAO.getProposalDetail(1);
+        assertEq(proposal.votesFor, 1);
+        assertEq(proposal.votesAgainst, 0);
+
+        // check if user2 has voted (check the mapping update with user address)
+        assertEq(aquaDAO.getIsHasVoted(1, user2), true);
+    }
+
+    /**
+     * Test voting on a proposal against
+     */
+    function test_vote_against() public createProposal(user1) {
+        vm.startPrank(user2);
+        aquaDAO.vote(1, false);
+        vm.stopPrank();
+
+        // Check proposal details
+        AquaDAO.ProposalForDisplay memory proposal = aquaDAO.getProposalDetail(1);
+        assertEq(proposal.votesFor, 0);
+        assertEq(proposal.votesAgainst, 1);
+
+        // check if user2 has voted (check the mapping update with user address)
+        assertEq(aquaDAO.getIsHasVoted(1, user2), true);
     }
 }
