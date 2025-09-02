@@ -164,6 +164,20 @@ contract AquaDAOTest is Test {
     }
 
     /**
+     * Test voting after the voting period has ended
+     */
+    function test_can_not_vote_if_the_voting_period_has_ended() public createProposal(user1) {
+        // Fast forward time to after the proposal deadline
+        vm.warp(block.timestamp + 4 days); // assuming the proposal duration was 3 days (in the `createProposal` modifier)
+
+        vm.startPrank(user2);
+        // Attempt to vote after the deadline
+        vm.expectRevert(AquaDAO.AquaDAO__VotingPeriodHasEnded.selector);
+        aquaDAO.vote(1, true);
+        vm.stopPrank();
+    }
+
+    /**
      * Test voting on a non-existent proposal
      */
     function test_can_not_vote_if_proposal_does_not_exist() public {
