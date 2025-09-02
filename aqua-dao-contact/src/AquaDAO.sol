@@ -17,7 +17,6 @@ contract AquaDAO {
     error AquaDAO__VotingPeriodHasEnded();
     error AquaDAO__AlreadyVoted();
     error AquaDAO__AlreadyExecutedProposal();
-    error AquaDAO__ProposalHasFailed();
 
     // ------------------------ Events ----------------------------
     event ProposalCreated(uint256 id, string description, uint256 deadline);
@@ -138,10 +137,6 @@ contract AquaDAO {
     function executeTheProposal(uint256 _proposalId) external onlyExistingProposal(_proposalId) {
         // Get the proposal
         Proposal storage proposal = proposals[_proposalId];
-        // Check if the proposal is active
-        if (block.timestamp > proposal.deadline) {
-            revert AquaDAO__ProposalHasFailed();
-        }
         // Check if the proposal has already been executed
         if (proposal.executed) {
             revert AquaDAO__AlreadyExecutedProposal();

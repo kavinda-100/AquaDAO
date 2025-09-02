@@ -41,6 +41,36 @@ contract AquaDAOTest is Test {
         _;
     }
 
+    /**
+     * Modifier to vote for a proposal by multiple users
+     * @param _rounds Number of users to vote
+     */
+    modifier voteFor(uint256 _rounds) {
+        for (uint256 i = 0; i < _rounds; i++) {
+            address user = makeAddr(string(abi.encodePacked("voter_for", vm.toString(i))));
+            vm.deal(user, initialUserBalance);
+            vm.startPrank(user);
+            aquaDAO.vote(1, true); // assuming the returning proposal ID is `1` from the `createProposal` function
+            vm.stopPrank();
+        }
+        _;
+    }
+
+    /**
+     * Modifier to vote for a proposal by multiple users
+     * @param _rounds Number of users to vote
+     */
+    modifier voteAgainst(uint256 _rounds) {
+        for (uint256 i = 0; i < _rounds; i++) {
+            address user = makeAddr(string(abi.encodePacked("voter_against", vm.toString(i))));
+            vm.deal(user, initialUserBalance);
+            vm.startPrank(user);
+            aquaDAO.vote(1, false); // assuming the returning proposal ID is `1` from the `createProposal` function
+            vm.stopPrank();
+        }
+        _;
+    }
+
     // ------------------------ Tests for create proposal ---------------------------------
 
     /**
@@ -186,5 +216,42 @@ contract AquaDAOTest is Test {
         vm.expectRevert(AquaDAO.AquaDAO__ProposalDoesNotExist.selector);
         aquaDAO.vote(999, true); // Assuming proposal ID 999 does not exist
         vm.stopPrank();
+    }
+
+    // ----------------------------------------- execute proposal tests -----------------------------------------
+
+    /**
+     * Test executing a proposal successfully after voting
+     */
+    function test_execute_the_proposal_successfully()
+        public
+        createProposal(user1)
+        voteFor(6) // 6 votes for
+        voteAgainst(3) // 3 votes against
+    {
+        // Execute the proposal
+        vm.startPrank(user1); // assuming user1 is the proposer and can execute
+        aquaDAO.executeTheProposal(1);
+        vm.stopPrank();
+
+        // Check proposal details
+        AquaDAO.ProposalForDisplay memory proposal = aquaDAO.getProposalDetail(1);
+        assertEq(proposal.executed, true);
+        assertEq(proposal.isProposalHasPassed, true);
+        assertEq(proposal.votesFor, 6);
+        assertEq(proposal.votesAgainst, 3);
+
+        // Check executed proposals
+        AquaDAO.ProposalForDisplay[] memory executedProposals = aquaDAO.getExecutedProposals();
+        assertEq(executedProposals.length, 1);
+        assertEq(executedProposals[0].id, 1);
+
+        // Check active proposals
+        AquaDAO.ProposalForDisplay[] memory activeProposals = aquaDAO.getActiveProposals();
+        assertEq(activeProposals.length, 0);
+
+        // Check failed proposals
+        AquaDAO.ProposalForDisplay[] memory failedProposals = aquaDAO.getFailedProposals();
+        assertEq(failedProposals.length, 0);
     }
 }
