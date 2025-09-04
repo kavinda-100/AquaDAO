@@ -14,7 +14,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, Vote, Info, Waves } from "lucide-react";
+import { Menu, Vote, Info, Waves, WebhookIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useScrolled } from "@/hooks/useScrolled";
 
@@ -61,6 +61,28 @@ export const Header = () => {
         <div className="flex items-center gap-4">
           {/* Desktop Navigation */}
           <nav className="hidden items-center gap-6 lg:flex">
+            <Link
+              href="/tokens"
+              className={cn(
+                "flex items-center gap-2 rounded-lg px-3 py-2 font-medium transition-all duration-200",
+                "hover:bg-accent/50 hover:text-accent-foreground group",
+                pathname === "/proposals"
+                  ? "bg-primary/10 text-primary border-primary/20 border"
+                  : "text-foreground/80 hover:text-foreground",
+              )}
+            >
+              <WebhookIcon
+                className={cn(
+                  "h-4 w-4 transition-transform duration-200",
+                  "group-hover:scale-110",
+                  pathname === "/tokens" ? "text-primary" : "",
+                )}
+              />
+              By Tokens
+              {pathname === "/tokens" && (
+                <div className="bg-primary h-1 w-1 animate-pulse rounded-full" />
+              )}
+            </Link>
             <Link
               href="/proposals"
               className={cn(
@@ -178,6 +200,29 @@ const MobileNav = () => {
         </SheetHeader>
 
         <nav className="mt-8 flex flex-col gap-3">
+          <Link
+            href="/tokens"
+            className={cn(
+              "flex items-center gap-2 rounded-lg px-3 py-2 font-medium transition-all duration-200",
+              "hover:bg-accent/50 hover:text-accent-foreground group",
+              pathname === "/proposals"
+                ? "bg-primary/10 text-primary border-primary/20 border"
+                : "text-foreground/80 hover:text-foreground",
+            )}
+          >
+            <WebhookIcon
+              className={cn(
+                "h-4 w-4 transition-transform duration-200",
+                "group-hover:scale-110",
+                pathname === "/tokens" ? "text-primary" : "",
+              )}
+            />
+            By Tokens
+            {pathname === "/tokens" && (
+              <div className="bg-primary h-1 w-1 animate-pulse rounded-full" />
+            )}
+          </Link>
+
           <Link
             href="/proposals"
             className={cn(
