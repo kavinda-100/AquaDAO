@@ -36,10 +36,11 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <WebThreeProvider>
-            <main className="mx-auto min-h-screen max-w-[2000px]">
+            <div className="mx-auto min-h-screen max-w-[2000px]">
               <Header />
-              {children}
-            </main>
+              {/* Main content with top padding to account for fixed header */}
+              <main className="pt-20">{children}</main>
+            </div>
           </WebThreeProvider>
         </ThemeProvider>
       </body>

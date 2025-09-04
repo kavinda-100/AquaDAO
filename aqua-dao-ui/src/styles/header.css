@@ -1,0 +1,42 @@
+/* Custom styles for the header blur effect and animations */
+
+.header-blur {
+  background: rgba(var(--background), 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(var(--border), 0.1);
+}
+
+/* Additional animations for the header */
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.header-enter {
+  animation: slideDown 0.3s ease-out;
+}
+
+/* Wave animation for the logo */
+@keyframes gentle-wave {
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(5deg) scale(1.05);
+  }
+  75% {
+    transform: rotate(-5deg) scale(0.95);
+  }
+}
+
+.wave-animation {
+  animation: gentle-wave 3s ease-in-out infinite;
+}
