@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "./header.css";
+@import "./footer.css";
 
 @custom-variant dark (&:is(.dark *));
 

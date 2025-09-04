@@ -7,6 +7,7 @@ import { Geist } from "next/font/google";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import WebThreeProvider from "@/providers/WebThreeProvider";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Aqua DAO",
@@ -38,8 +39,8 @@ export default function RootLayout({
           <WebThreeProvider>
             <div className="mx-auto min-h-screen max-w-[2000px]">
               <Header />
-              {/* Main content with top padding to account for fixed header */}
               <main className="pt-20">{children}</main>
+              <Footer />
             </div>
           </WebThreeProvider>
         </ThemeProvider>

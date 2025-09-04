@@ -40,3 +40,51 @@
 .wave-animation {
   animation: gentle-wave 3s ease-in-out infinite;
 }
+
+/* Footer animations and effects */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.footer-section {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.footer-link-hover {
+  position: relative;
+  transition: all 0.2s ease-in-out;
+}
+
+.footer-link-hover::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--primary);
+  transition: width 0.3s ease-in-out;
+}
+
+.footer-link-hover:hover::after {
+  width: 100%;
+}
+
+/* Social icon hover effects */
+.social-icon {
+  transition: all 0.3s ease-in-out;
+}
+
+.social-icon:hover {
+  background: linear-gradient(135deg, var(--primary), var(--primary) / 70);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--primary), 0.3);
+}
