@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 
 // Custom SVG Components for blockchain theme
 const BlockchainIcon = ({ className }: { className?: string }) => (
@@ -434,7 +435,9 @@ export const HeroSection = () => {
                   animate={{ x: [-100, 100] }}
                   transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                 />
-                <span className="relative z-10">Start Participating</span>
+                <Link href={"/proposals"}>
+                  <span className="relative z-10">Start Exploring</span>
+                </Link>
               </motion.button>
 
               <motion.button
