@@ -65,8 +65,10 @@ contract AquaDAOTest is Test {
     modifier voteFor(uint256 _rounds) {
         for (uint256 i = 0; i < _rounds; i++) {
             address user = makeAddr(string(abi.encodePacked("voter_for", vm.toString(i))));
+            uint256 mintCost = 1 * aquaGovToken.getMintPrice();
             vm.deal(user, initialUserBalance);
             vm.startPrank(user);
+            aquaGovToken.mint{value: mintCost}(1);
             aquaDAO.vote(1, true); // assuming the returning proposal ID is `1` from the `createProposal` function
             vm.stopPrank();
         }
@@ -80,8 +82,10 @@ contract AquaDAOTest is Test {
     modifier voteAgainst(uint256 _rounds) {
         for (uint256 i = 0; i < _rounds; i++) {
             address user = makeAddr(string(abi.encodePacked("voter_against", vm.toString(i))));
+            uint256 mintCost = 1 * aquaGovToken.getMintPrice();
             vm.deal(user, initialUserBalance);
             vm.startPrank(user);
+            aquaGovToken.mint{value: mintCost}(1);
             aquaDAO.vote(1, false); // assuming the returning proposal ID is `1` from the `createProposal` function
             vm.stopPrank();
         }
@@ -232,6 +236,19 @@ contract AquaDAOTest is Test {
         // Attempt to vote on a non-existent proposal
         vm.expectRevert(AquaDAO.AquaDAO__ProposalDoesNotExist.selector);
         aquaDAO.vote(999, true); // Assuming proposal ID 999 does not exist
+        vm.stopPrank();
+    }
+
+    /**
+     * Test voting by a user who does not hold any AquaGovTokens
+     */
+    function test_can_not_vote_if_voter_has_no_tokens() public createProposal(user1) {
+        // user2 has no AquaGovTokens
+
+        vm.startPrank(user2);
+        // Attempt to vote without holding any AquaGovTokens
+        vm.expectRevert(AquaDAO.AquaDAO__NoRightsToVote.selector);
+        aquaDAO.vote(1, true); // Assuming proposal ID 1 exists
         vm.stopPrank();
     }
 
@@ -390,7 +407,7 @@ contract AquaDAOTest is Test {
     /**
      * Test getIsHasVoted function with users who haven't voted
      */
-    function test_getIsHasVoted_false() public createProposal(user1) {
+    function test_getIsHasVoted_false() public createProposal(user1) byAquaTokens(user2, 1) {
         // Check that user2 hasn't voted initially
         assertEq(aquaDAO.getIsHasVoted(1, user2), false);
 
@@ -456,7 +473,10 @@ contract AquaDAOTest is Test {
 
         // Vote on first proposal
         address voter1 = makeAddr("voter1");
+        uint256 mintCost = 1 * aquaGovToken.getMintPrice();
+        vm.deal(voter1, initialUserBalance);
         vm.startPrank(voter1);
+        aquaGovToken.mint{value: mintCost}(1);
         aquaDAO.vote(1, true);
         vm.stopPrank();
 
@@ -514,7 +534,7 @@ contract AquaDAOTest is Test {
     /**
      * Test edge case where proposal deadline exactly equals current timestamp
      */
-    function test_vote_exactly_at_deadline() public createProposal(user1) {
+    function test_vote_exactly_at_deadline() public createProposal(user1) byAquaTokens(user2, 1) {
         // Get the proposal deadline
         AquaDAO.ProposalForDisplay memory proposal = aquaDAO.getProposalDetail(1);
         uint256 deadline = proposal.deadline;
