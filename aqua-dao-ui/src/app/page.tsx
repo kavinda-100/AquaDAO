@@ -1,6 +1,7 @@
 import { HeroSection } from "@/sections/HeroSection";
 import { FeaturesSection } from "@/sections/FeaturesSection";
 import { TestimonialsSection } from "@/sections/TestimonialsSection";
+import { HowItWorks } from "@/sections/HowItWorks";
 
 export default function HomePage() {
   return (
@@ -8,6 +9,7 @@ export default function HomePage() {
       <HeroSection />
       <FeaturesSection />
       <TestimonialsSection />
+      <HowItWorks />
     </section>
   );
 }
