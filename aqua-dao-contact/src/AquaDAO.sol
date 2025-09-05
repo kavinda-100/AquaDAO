@@ -18,6 +18,7 @@ contract AquaDAO {
     error AquaDAO__AlreadyVoted();
     error AquaDAO__AlreadyExecutedProposal();
     error AquaDAO__NotProposalOwner();
+    error AquaDAO__NoRightsToVote();
 
     // ------------------------ Events ----------------------------
     event ProposalCreated(uint256 id, string description, uint256 deadline);
@@ -130,13 +131,18 @@ contract AquaDAO {
         if (proposal.voted[msg.sender]) {
             revert AquaDAO__AlreadyVoted();
         }
+        // check the voter has at least 1 governance token
+        uint256 voterBalance = s_AquaGovToken.balanceOf(msg.sender);
+        if (voterBalance < 1) {
+            revert AquaDAO__NoRightsToVote();
+        }
 
         // Record the vote
         proposal.voted[msg.sender] = true;
         if (_support) {
-            proposal.votesFor++;
+            proposal.votesFor = proposal.votesFor + voterBalance;
         } else {
-            proposal.votesAgainst++;
+            proposal.votesAgainst = proposal.votesAgainst + voterBalance;
         }
 
         // emit the Voted event

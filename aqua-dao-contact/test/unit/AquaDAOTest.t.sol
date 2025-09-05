@@ -3,11 +3,13 @@ pragma solidity ^0.8.24;
 
 import {Test, console2} from "forge-std/Test.sol";
 import {AquaDAO} from "../../src/AquaDAO.sol";
+import {AquaGovToken} from "../../src/AquaGovToken.sol";
 import {DeployAquaDAO} from "../../script/DeployAquaDAO.s.sol";
 
 contract AquaDAOTest is Test {
     // ---------------------- State Variables ---------------------------------
     AquaDAO aquaDAO;
+    AquaGovToken aquaGovToken;
     address public user1 = makeAddr("user1");
     address public user2 = makeAddr("user2");
     uint256 public initialUserBalance = 10 ether;
@@ -20,7 +22,7 @@ contract AquaDAOTest is Test {
     // ---------------------- Set Up ---------------------------------
     function setUp() public {
         DeployAquaDAO deployAquaDAO = new DeployAquaDAO();
-        (,, aquaDAO) = deployAquaDAO.run();
+        (, aquaGovToken, aquaDAO) = deployAquaDAO.run();
 
         // fund users
         vm.deal(user1, initialUserBalance);
@@ -37,6 +39,21 @@ contract AquaDAOTest is Test {
         uint256 proposalDuration = 3; // `createProposal` function covert this number to days (eg:- 3 -> 3 days)
         vm.startPrank(_creator);
         aquaDAO.createProposal(description, proposalDuration);
+        vm.stopPrank();
+        _;
+    }
+
+    /**
+     * Modifier to mint AquaGovTokens to a voter
+     * @param _voter The address of the voter
+     * @param _tokenAmount The amount of tokens to mint
+     */
+    modifier byAquaTokens(address _voter, uint256 _tokenAmount) {
+        uint256 mintCost = _tokenAmount * aquaGovToken.getMintPrice();
+        // mint at least 1 AquaGovToken to the voter
+        vm.deal(_voter, 10 ether); // fund with 10 ether to cover minting cost
+        vm.startPrank(_voter);
+        aquaGovToken.mint{value: mintCost}(_tokenAmount);
         vm.stopPrank();
         _;
     }
@@ -135,14 +152,14 @@ contract AquaDAOTest is Test {
     /**
      * Test voting on a proposal in support
      */
-    function test_vote_by_support() public createProposal(user1) {
+    function test_vote_by_support() public createProposal(user1) byAquaTokens(user2, 1) {
         vm.startPrank(user2);
         aquaDAO.vote(1, true);
         vm.stopPrank();
 
         // Check proposal details
         AquaDAO.ProposalForDisplay memory proposal = aquaDAO.getProposalDetail(1);
-        assertEq(proposal.votesFor, 1);
+        assertEq(proposal.votesFor, 1); // minted 1 token
         assertEq(proposal.votesAgainst, 0);
 
         // check if user2 has voted (check the mapping update with user address)
@@ -152,7 +169,7 @@ contract AquaDAOTest is Test {
     /**
      * Test voting on a proposal against
      */
-    function test_vote_against() public createProposal(user1) {
+    function test_vote_against() public createProposal(user1) byAquaTokens(user2, 1) {
         vm.startPrank(user2);
         aquaDAO.vote(1, false);
         vm.stopPrank();
@@ -169,7 +186,7 @@ contract AquaDAOTest is Test {
     /**
      * Test voting emits events
      */
-    function test_vote_emitsEvents() public createProposal(user1) {
+    function test_vote_emitsEvents() public createProposal(user1) byAquaTokens(user2, 1) {
         vm.startPrank(user2);
         // Expect event
         vm.expectEmit(true, true, true, true);
@@ -182,7 +199,7 @@ contract AquaDAOTest is Test {
     /**
      * Test that a user cannot vote twice on the same proposal
      */
-    function test_can_not_vote_twice() public createProposal(user1) {
+    function test_can_not_vote_twice() public createProposal(user1) byAquaTokens(user2, 1) {
         vm.startPrank(user2);
         // First vote
         aquaDAO.vote(1, true);
@@ -196,7 +213,7 @@ contract AquaDAOTest is Test {
     /**
      * Test voting after the voting period has ended
      */
-    function test_can_not_vote_if_the_voting_period_has_ended() public createProposal(user1) {
+    function test_can_not_vote_if_the_voting_period_has_ended() public createProposal(user1) byAquaTokens(user2, 1) {
         // Fast forward time to after the proposal deadline
         vm.warp(block.timestamp + 4 days); // assuming the proposal duration was 3 days (in the `createProposal` modifier)
 
