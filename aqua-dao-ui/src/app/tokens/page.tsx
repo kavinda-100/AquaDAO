@@ -50,6 +50,7 @@ import {
 } from "lucide-react";
 import { UserTokenBalance } from "./_components/UserTokenBalance";
 import { useQueryClient } from "@tanstack/react-query";
+import { fi } from "zod/v4/locales";
 
 const formSchema = z.object({
   wallet_address: z
@@ -246,6 +247,9 @@ const TokenBuyPage = () => {
                           placeholder="1"
                           disabled={isTokenPricePending}
                           {...field}
+                          onChange={(e) =>
+                            field.onChange(Number(e.target.value))
+                          }
                           className="bg-background/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 h-12 text-base"
                         />
                       </FormControl>
