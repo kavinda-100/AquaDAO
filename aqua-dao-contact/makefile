@@ -50,18 +50,10 @@ export
 
 # Deploy to local Anvil (requires anvil to be running)
 deploy-local:
-	forge script script/DeployCrowdFundingFactory.s.sol:DeployCrowdFundingFactory \
+	forge script script/DeployAquaDAO.s.sol:DeployAquaDAO \
 		--fork-url $(ANVIL_RPC_URL) \
 		--private-key $(ANVIL_PRIVATE_KEY) \
 		--broadcast
-
-# Deploy to local Anvil with verification
-deploy-local-verify:
-	forge script script/DeployCrowdFundingFactory.s.sol:DeployCrowdFundingFactory \
-		--fork-url $(ANVIL_RPC_URL) \
-		--private-key $(ANVIL_PRIVATE_KEY) \
-		--broadcast \
-		--verify
 
 # Deploy to Sepolia testnet (requires SEPOLIA_RPC_URL and PRIVATE_KEY env vars)
 deploy-sepolia:
@@ -71,7 +63,7 @@ deploy-sepolia:
 		echo "📝 Example: export PRIVATE_KEY=0x..."; \
 		exit 1; \
 	fi
-	forge script script/DeployCrowdFundingFactory.s.sol:DeployCrowdFundingFactory \
+	forge script script/DeployAquaDAO.s.sol:DeployAquaDAO \
 		--fork-url $(SEPOLIA_RPC_URL) \
 		--private-key $(PRIVATE_KEY) \
 		--broadcast \
@@ -81,6 +73,42 @@ deploy-sepolia:
 # ================================
 # 🛠️  UTILITY COMMANDS
 # ================================
+
+# Function to create .env file content (accepts filename as argument)
+define create_env_content
+	@echo "📝 Creating $(1) template..."
+	@touch $(1)
+	@echo "" >> $(1)
+	@echo "# Development Mode" >> $(1)
+	@echo "# Make it false when deploying to testnet/mainnet" >> $(1)
+	@echo "IS_DEV=true" >> $(1)
+	@echo "" >> $(1)
+	@echo "# Anvil Local Development" >> $(1)
+	@echo "ANVIL_RPC_URL=http://127.0.0.1:8545" >> $(1)
+	@echo "ANVIL_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80" >> $(1)
+	@echo "" >> $(1)
+	@echo "# Sepolia Testnet (fill in your values)" >> $(1)
+	@echo "SEPOLIA_RPC_URL=https://eth-sepolia.g.alchemy.com/v2/YOUR_API_KEY" >> $(1)
+	@echo "PRIVATE_KEY=0xYOUR_PRIVATE_KEY" >> $(1)
+	@echo "ETHERSCAN_API_KEY=YOUR_ETHERSCAN_API_KEY" >> $(1)
+	@echo "✅ $(1) file created!"
+endef
+
+# Create .env and .env.example templates (removes existing files if present)
+create-env:
+	@if [ -f .env ]; then \
+		echo "⚠️  .env file already exists. Removing and recreating..."; \
+		rm .env; \
+	fi
+	@if [ -f .env.example ]; then \
+		echo "⚠️  .env.example file already exists. Removing and recreating..."; \
+		rm .env.example; \
+	fi
+	$(call create_env_content,.env)
+	$(call create_env_content,.env.example)
+	@echo ""
+	@echo "🎉 Both .env and .env.example files created!"
+	@echo "💡 Please review and update the values in .env file."
 
 # Check if Anvil is running
 check-anvil:
@@ -101,24 +129,6 @@ show-anvil-accounts:
 	@echo "Private Key: 0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d"
 	@echo ""
 	@echo "💡 Use Account #0 for ANVIL_PRIVATE_KEY in your .env file"
-
-# Create .env template
-create-env:
-	@if [ ! -f .env ]; then \
-	    touch .env; \
-		echo "📝 Creating .env template..."; >> .env; \
-		echo "# Anvil Local Development" >> .env; \
-		echo "ANVIL_RPC_URL=http://127.0.0.1:8545" >> .env; \
-		echo "ANVIL_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80" >> .env; \
-		echo "" >> .env; \
-		echo "# Sepolia Testnet (fill in your values)" >> .env; \
-		echo "SEPOLIA_RPC_URL=https://eth-sepolia.g.alchemy.com/v2/YOUR_API_KEY" >> .env; \
-		echo "PRIVATE_KEY=0xYOUR_PRIVATE_KEY" >> .env; \
-		echo "ETHERSCAN_API_KEY=YOUR_ETHERSCAN_API_KEY" >> .env; \
-		echo "✅ .env file created! Please review and update the values."; \
-	else \
-		echo "⚠️  .env file already exists"; \
-	fi
 
 help:
 	@echo "🌊 Ocean Token Deployment Commands:"
