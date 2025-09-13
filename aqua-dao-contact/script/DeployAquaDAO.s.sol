@@ -32,15 +32,8 @@ contract DeployAquaDAO is Script {
         console2.log("AquaDAO deployed at:", address(aquaDAO));
         console2.log("================================================================");
 
-        // Only write deployment summary when isDev environment variable is set to true
-        try vm.envBool("IS_DEV") returns (bool isDev) {
-            if (!isDev) {
-                _writeDeploymentSummaryToJson(address(treasury), address(governanceToken), address(aquaDAO));
-            }
-        } catch {
-            // If isDev environment variable is not set, don't write deployment summary
-            console2.log("isDev environment variable not set, skipping deployment summary file creation.");
-        }
+        //TODO: ⚠️ comment when testing
+        _writeDeploymentSummaryToJson(address(treasury), address(governanceToken), address(aquaDAO));
 
         return (treasury, governanceToken, aquaDAO);
     }

@@ -1,1 +1,9 @@
-{"aqua_dao_address":"0x90193C961A926261B756D1E5bb255e67ff9498A1","aqua_dao_treasury_address":"0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496","aqua_gov_token_address":"0x34A1D3fff3958843C43aD80F30b94c510645C316","block_number":1,"chain_id":31337,"deployment_timestamp":1,"status":"deployed_successfully"}
+{
+  "aqua_dao_address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+  "aqua_dao_treasury_address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "aqua_gov_token_address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+  "block_number": 0,
+  "chain_id": 31337,
+  "deployment_timestamp": 1757737264,
+  "status": "deployed_successfully"
+}
