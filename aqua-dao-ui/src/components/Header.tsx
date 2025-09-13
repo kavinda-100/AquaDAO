@@ -66,7 +66,7 @@ export const Header = () => {
               className={cn(
                 "flex items-center gap-2 rounded-lg px-3 py-2 font-medium transition-all duration-200",
                 "hover:bg-accent/50 hover:text-accent-foreground group",
-                pathname === "/proposals"
+                pathname === "/tokens"
                   ? "bg-primary/10 text-primary border-primary/20 border"
                   : "text-foreground/80 hover:text-foreground",
               )}
