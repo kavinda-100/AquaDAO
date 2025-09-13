@@ -35,7 +35,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { formatEther, formatGwei, parseEther } from "viem";
+import { formatEther, formatGwei } from "viem";
 import { Loader2Icon } from "lucide-react";
 
 const formSchema = z.object({
@@ -47,7 +47,7 @@ const formSchema = z.object({
   token_amount: z.number().min(1, "Must request at least 1 token"),
 });
 
-const TokenByPage = () => {
+const TokenBuyPage = () => {
   const [open, setOpen] = React.useState(false); // confirmation dialog
   const [openFinalDialog, setOpenFinalDialog] = React.useState(false); // final success or failure dialog
   const [isWritingContractSuccess, setIsWritingContractSuccess] =
@@ -75,6 +75,7 @@ const TokenByPage = () => {
     args: [],
   });
   console.log("Token Price Error:", tokenPriceError);
+  console.log("type of the token price:", typeof tokenPrice); // should be 'bigint' if fetched correctly
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -92,11 +93,12 @@ const TokenByPage = () => {
   /**
    * Calculate the total price for a given number of tokens.
    * @param tokenAmount number of tokens to buy
-   * @returns total price in wei (as a BigInt string)
+   * @returns total price in wei (as a BigInt)
    */
   function calculateTotalPrice(tokenAmount: number): bigint {
     if (tokenPrice && typeof tokenPrice === "bigint") {
-      return parseEther(tokenAmount.toString()) * tokenPrice;
+      // tokenPrice is 1 wei per token, so total = tokenAmount * 1 wei
+      return BigInt(tokenAmount) * tokenPrice;
     }
     return BigInt(0);
   }
@@ -246,19 +248,19 @@ const TokenByPage = () => {
               wallet to cover the total price.
             </p>
           </div>
+          <DialogFooter className="flex w-full justify-end space-x-2 pt-4">
+            <Button variant="outline" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={confirmPurchase} disabled={isMintingPending}>
+              {isMintingPending ? (
+                <Loader2Icon className="size-4 animate-spin" />
+              ) : (
+                "Confirm Purchase"
+              )}
+            </Button>
+          </DialogFooter>
         </DialogContent>
-        <DialogFooter className="flex w-full justify-end space-x-2 pt-4">
-          <Button variant="outline" onClick={() => setOpen(false)}>
-            Cancel
-          </Button>
-          <Button onClick={confirmPurchase} disabled={isMintingPending}>
-            {isMintingPending ? (
-              <Loader2Icon className="size-4 animate-spin" />
-            ) : (
-              "Confirm Purchase"
-            )}
-          </Button>
-        </DialogFooter>
       </Dialog>
 
       {/* final result */}
@@ -300,20 +302,20 @@ const TokenByPage = () => {
               </p>
             )}
           </div>
+          <DialogFooter>
+            <Button
+              onClick={() => {
+                form.reset(); // reset form after success or failure
+                setOpenFinalDialog(false);
+              }}
+            >
+              Close
+            </Button>
+          </DialogFooter>
         </DialogContent>
-        <DialogFooter>
-          <Button
-            onClick={() => {
-              form.reset(); // reset form after success or failure
-              setOpenFinalDialog(false);
-            }}
-          >
-            Close
-          </Button>
-        </DialogFooter>
       </Dialog>
     </section>
   );
 };
 
-export default TokenByPage;
+export default TokenBuyPage;
