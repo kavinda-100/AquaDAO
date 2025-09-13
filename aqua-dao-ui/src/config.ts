@@ -11,7 +11,7 @@ import {
 } from "wagmi/chains";
 
 const config = getDefaultConfig({
-  appName: "My RainbowKit App",
+  appName: "Aqua DAO",
   projectId: "YOUR_PROJECT_ID",
   chains: [mainnet, zksync, polygon, optimism, arbitrum, base, sepolia, anvil],
   ssr: true, // If your dApp uses server side rendering (SSR)
