@@ -50,7 +50,6 @@ import {
 } from "lucide-react";
 import { UserTokenBalance } from "./_components/UserTokenBalance";
 import { useQueryClient } from "@tanstack/react-query";
-import { fi } from "zod/v4/locales";
 
 const formSchema = z.object({
   wallet_address: z
