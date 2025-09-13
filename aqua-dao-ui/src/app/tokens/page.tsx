@@ -4,7 +4,7 @@ import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useReadContract, useWriteContract } from "wagmi";
+import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import { AQUA_GOV_TOKEN_ADDRESS } from "@/abi";
 import AquaGovTokenABI from "@/abi/AquaGovToken.json";
 
@@ -37,6 +37,8 @@ import {
 } from "@/components/ui/dialog";
 import { formatEther, formatGwei } from "viem";
 import { Loader2Icon } from "lucide-react";
+import { UserTokenBalance } from "./_components/UserTokenBalance";
+import { useQueryClient } from "@tanstack/react-query";
 
 const formSchema = z.object({
   wallet_address: z
@@ -55,6 +57,12 @@ const TokenBuyPage = () => {
   const [writingContractError, setIsWritingContractError] =
     React.useState<Error | null>(null); // track contract write error
 
+  // use account hook
+  const account = useAccount();
+
+  // useQueryClient hook
+  const queryClient = useQueryClient();
+
   // minting to contract
   const {
     data: hash,
@@ -68,6 +76,7 @@ const TokenBuyPage = () => {
     isPending: isTokenPricePending,
     isError: isTokenPriceError,
     error: tokenPriceError,
+    queryKey: readContractQueryKey,
   } = useReadContract({
     address: AQUA_GOV_TOKEN_ADDRESS as `0x${string}`,
     abi: AquaGovTokenABI.abi,
@@ -89,6 +98,13 @@ const TokenBuyPage = () => {
     console.log(values);
     setOpen(true);
   }
+
+  // useEffect to set the wallet address field if the user is connected
+  React.useEffect(() => {
+    if (account.isConnected && account.address) {
+      form.setValue("wallet_address", account.address);
+    }
+  }, [account.address, account.isConnected, form]);
 
   /**
    * Calculate the total price for a given number of tokens.
@@ -117,7 +133,10 @@ const TokenBuyPage = () => {
         value: totalCost,
       },
       {
-        onSuccess() {
+        onSuccess: () => {
+          void queryClient.invalidateQueries({
+            queryKey: readContractQueryKey,
+          });
           console.log("Minting transaction sent:", hash);
           setOpen(false);
           setIsWritingContractSuccess(true);
@@ -217,6 +236,9 @@ const TokenBuyPage = () => {
           )}
         </CardFooter>
       </Card>
+
+      {/* User Token Balance */}
+      <UserTokenBalance />
 
       {/* confirmation Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
