@@ -1,0 +1,285 @@
+{
+  "abi": [
+    { "type": "constructor", "inputs": [], "stateMutability": "nonpayable" },
+    { "type": "receive", "stateMutability": "payable" },
+    {
+      "type": "function",
+      "name": "owner",
+      "inputs": [],
+      "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "renounceOwnership",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "sendETH",
+      "inputs": [
+        { "name": "_to", "type": "address", "internalType": "address" },
+        { "name": "_amount", "type": "uint256", "internalType": "uint256" }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "transferOwnership",
+      "inputs": [
+        { "name": "newOwner", "type": "address", "internalType": "address" }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "event",
+      "name": "ETHSent",
+      "inputs": [
+        {
+          "name": "to",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "OwnershipTransferred",
+      "inputs": [
+        {
+          "name": "previousOwner",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "newOwner",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "error",
+      "name": "AquaDAOTreasury__ETHTransferFailed",
+      "inputs": []
+    },
+    { "type": "error", "name": "AquaDAOTreasury__NotEnoughETH", "inputs": [] },
+    {
+      "type": "error",
+      "name": "OwnableInvalidOwner",
+      "inputs": [
+        { "name": "owner", "type": "address", "internalType": "address" }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "OwnableUnauthorizedAccount",
+      "inputs": [
+        { "name": "account", "type": "address", "internalType": "address" }
+      ]
+    }
+  ],
+  "bytecode": {
+    "object": "0x608060405234801561000f575f5ffd5b50335f73ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff1603610081575f6040517f1e4fbdf70000000000000000000000000000000000000000000000000000000081526004016100789190610196565b60405180910390fd5b6100908161009660201b60201c565b506101af565b5f5f5f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050815f5f6101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055508173ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a35050565b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f61018082610157565b9050919050565b61019081610176565b82525050565b5f6020820190506101a95f830184610187565b92915050565b6105df806101bc5f395ff3fe608060405260043610610042575f3560e01c806364a197f31461004d578063715018a6146100755780638da5cb5b1461008b578063f2fde38b146100b557610049565b3661004957005b5f5ffd5b348015610058575f5ffd5b50610073600480360381019061006e91906104af565b6100dd565b005b348015610080575f5ffd5b50610089610211565b005b348015610096575f5ffd5b5061009f610224565b6040516100ac91906104fc565b60405180910390f35b3480156100c0575f5ffd5b506100db60048036038101906100d69190610515565b61024b565b005b6100e56102cf565b8047101561011f576040517f66f0e3e300000000000000000000000000000000000000000000000000000000815260040160405180910390fd5b5f8273ffffffffffffffffffffffffffffffffffffffff16826040516101449061056d565b5f6040518083038185875af1925050503d805f811461017e576040519150601f19603f3d011682016040523d82523d5f602084013e610183565b606091505b50509050806101be576040517f783224cd00000000000000000000000000000000000000000000000000000000815260040160405180910390fd5b8273ffffffffffffffffffffffffffffffffffffffff167f07e522f923c81306583f6ac561a0b016b750def4b9fba3fc2198249b036905e5836040516102049190610590565b60405180910390a2505050565b6102196102cf565b6102225f610356565b565b5f5f5f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b6102536102cf565b5f73ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16036102c3575f6040517f1e4fbdf70000000000000000000000000000000000000000000000000000000081526004016102ba91906104fc565b60405180910390fd5b6102cc81610356565b50565b6102d7610417565b73ffffffffffffffffffffffffffffffffffffffff166102f5610224565b73ffffffffffffffffffffffffffffffffffffffff161461035457610318610417565b6040517f118cdaa700000000000000000000000000000000000000000000000000000000815260040161034b91906104fc565b60405180910390fd5b565b5f5f5f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050815f5f6101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055508173ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a35050565b5f33905090565b5f5ffd5b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f61044b82610422565b9050919050565b61045b81610441565b8114610465575f5ffd5b50565b5f8135905061047681610452565b92915050565b5f819050919050565b61048e8161047c565b8114610498575f5ffd5b50565b5f813590506104a981610485565b92915050565b5f5f604083850312156104c5576104c461041e565b5b5f6104d285828601610468565b92505060206104e38582860161049b565b9150509250929050565b6104f681610441565b82525050565b5f60208201905061050f5f8301846104ed565b92915050565b5f6020828403121561052a5761052961041e565b5b5f61053784828501610468565b91505092915050565b5f81905092915050565b50565b5f6105585f83610540565b91506105638261054a565b5f82019050919050565b5f6105778261054d565b9150819050919050565b61058a8161047c565b82525050565b5f6020820190506105a35f830184610581565b9291505056fea2646970667358221220da1c9cf3972d6f081fa7381de639aede801d295a7410baa254df50ba819a812164736f6c634300081e0033",
+    "sourceMap": "429:1168:28:-:0;;;864:36;;;;;;;;;;886:10;1297:1:20;1273:26;;:12;:26;;;1269:95;;1350:1;1322:31;;;;;;;;;;;:::i;:::-;;;;;;;;1269:95;1373:32;1392:12;1373:18;;;:32;;:::i;:::-;1225:187;429:1168:28;;2912:187:20;2985:16;3004:6;;;;;;;;;;;2985:25;;3029:8;3020:6;;:17;;;;;;;;;;;;;;;;;;3083:8;3052:40;;3073:8;3052:40;;;;;;;;;;;;2975:124;2912:187;:::o;7:126:31:-;44:7;84:42;77:5;73:54;62:65;;7:126;;;:::o;139:96::-;176:7;205:24;223:5;205:24;:::i;:::-;194:35;;139:96;;;:::o;241:118::-;328:24;346:5;328:24;:::i;:::-;323:3;316:37;241:118;;:::o;365:222::-;458:4;496:2;485:9;481:18;473:26;;509:71;577:1;566:9;562:17;553:6;509:71;:::i;:::-;365:222;;;;:::o;429:1168:28:-;;;;;;;",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x608060405260043610610042575f3560e01c806364a197f31461004d578063715018a6146100755780638da5cb5b1461008b578063f2fde38b146100b557610049565b3661004957005b5f5ffd5b348015610058575f5ffd5b50610073600480360381019061006e91906104af565b6100dd565b005b348015610080575f5ffd5b50610089610211565b005b348015610096575f5ffd5b5061009f610224565b6040516100ac91906104fc565b60405180910390f35b3480156100c0575f5ffd5b506100db60048036038101906100d69190610515565b61024b565b005b6100e56102cf565b8047101561011f576040517f66f0e3e300000000000000000000000000000000000000000000000000000000815260040160405180910390fd5b5f8273ffffffffffffffffffffffffffffffffffffffff16826040516101449061056d565b5f6040518083038185875af1925050503d805f811461017e576040519150601f19603f3d011682016040523d82523d5f602084013e610183565b606091505b50509050806101be576040517f783224cd00000000000000000000000000000000000000000000000000000000815260040160405180910390fd5b8273ffffffffffffffffffffffffffffffffffffffff167f07e522f923c81306583f6ac561a0b016b750def4b9fba3fc2198249b036905e5836040516102049190610590565b60405180910390a2505050565b6102196102cf565b6102225f610356565b565b5f5f5f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b6102536102cf565b5f73ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16036102c3575f6040517f1e4fbdf70000000000000000000000000000000000000000000000000000000081526004016102ba91906104fc565b60405180910390fd5b6102cc81610356565b50565b6102d7610417565b73ffffffffffffffffffffffffffffffffffffffff166102f5610224565b73ffffffffffffffffffffffffffffffffffffffff161461035457610318610417565b6040517f118cdaa700000000000000000000000000000000000000000000000000000000815260040161034b91906104fc565b60405180910390fd5b565b5f5f5f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050815f5f6101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055508173ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a35050565b5f33905090565b5f5ffd5b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f61044b82610422565b9050919050565b61045b81610441565b8114610465575f5ffd5b50565b5f8135905061047681610452565b92915050565b5f819050919050565b61048e8161047c565b8114610498575f5ffd5b50565b5f813590506104a981610485565b92915050565b5f5f604083850312156104c5576104c461041e565b5b5f6104d285828601610468565b92505060206104e38582860161049b565b9150509250929050565b6104f681610441565b82525050565b5f60208201905061050f5f8301846104ed565b92915050565b5f6020828403121561052a5761052961041e565b5b5f61053784828501610468565b91505092915050565b5f81905092915050565b50565b5f6105585f83610540565b91506105638261054a565b5f82019050919050565b5f6105778261054d565b9150819050919050565b61058a8161047c565b82525050565b5f6020820190506105a35f830184610581565b9291505056fea2646970667358221220da1c9cf3972d6f081fa7381de639aede801d295a7410baa254df50ba819a812164736f6c634300081e0033",
+    "sourceMap": "429:1168:28:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1177:321;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;:::i;:::-;;2293:101:20;;;;;;;;;;;;;:::i;:::-;;1638:85;;;;;;;;;;;;;:::i;:::-;;;;;;;:::i;:::-;;;;;;;;2543:215;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;:::i;:::-;;1177:321:28;1531:13:20;:11;:13::i;:::-;1281:7:28::1;1257:21;:31;1253:75;;;1297:31;;;;;;;;;;;;;;1253:75;1339:9;1361:3;1353:17;;1378:7;1353:37;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1338:52;;;1405:4;1400:54;;1418:36;;;;;;;;;;;;;;1400:54;1478:3;1470:21;;;1483:7;1470:21;;;;;;:::i;:::-;;;;;;;;1243:255;1177:321:::0;;:::o;2293:101:20:-;1531:13;:11;:13::i;:::-;2357:30:::1;2384:1;2357:18;:30::i;:::-;2293:101::o:0;1638:85::-;1684:7;1710:6;;;;;;;;;;;1703:13;;1638:85;:::o;2543:215::-;1531:13;:11;:13::i;:::-;2647:1:::1;2627:22;;:8;:22;;::::0;2623:91:::1;;2700:1;2672:31;;;;;;;;;;;:::i;:::-;;;;;;;;2623:91;2723:28;2742:8;2723:18;:28::i;:::-;2543:215:::0;:::o;1796:162::-;1866:12;:10;:12::i;:::-;1855:23;;:7;:5;:7::i;:::-;:23;;;1851:101;;1928:12;:10;:12::i;:::-;1901:40;;;;;;;;;;;:::i;:::-;;;;;;;;1851:101;1796:162::o;2912:187::-;2985:16;3004:6;;;;;;;;;;;2985:25;;3029:8;3020:6;;:17;;;;;;;;;;;;;;;;;;3083:8;3052:40;;3073:8;3052:40;;;;;;;;;;;;2975:124;2912:187;:::o;656:96:25:-;709:7;735:10;728:17;;656:96;:::o;88:117:31:-;197:1;194;187:12;334:126;371:7;411:42;404:5;400:54;389:65;;334:126;;;:::o;466:96::-;503:7;532:24;550:5;532:24;:::i;:::-;521:35;;466:96;;;:::o;568:122::-;641:24;659:5;641:24;:::i;:::-;634:5;631:35;621:63;;680:1;677;670:12;621:63;568:122;:::o;696:139::-;742:5;780:6;767:20;758:29;;796:33;823:5;796:33;:::i;:::-;696:139;;;;:::o;841:77::-;878:7;907:5;896:16;;841:77;;;:::o;924:122::-;997:24;1015:5;997:24;:::i;:::-;990:5;987:35;977:63;;1036:1;1033;1026:12;977:63;924:122;:::o;1052:139::-;1098:5;1136:6;1123:20;1114:29;;1152:33;1179:5;1152:33;:::i;:::-;1052:139;;;;:::o;1197:474::-;1265:6;1273;1322:2;1310:9;1301:7;1297:23;1293:32;1290:119;;;1328:79;;:::i;:::-;1290:119;1448:1;1473:53;1518:7;1509:6;1498:9;1494:22;1473:53;:::i;:::-;1463:63;;1419:117;1575:2;1601:53;1646:7;1637:6;1626:9;1622:22;1601:53;:::i;:::-;1591:63;;1546:118;1197:474;;;;;:::o;1677:118::-;1764:24;1782:5;1764:24;:::i;:::-;1759:3;1752:37;1677:118;;:::o;1801:222::-;1894:4;1932:2;1921:9;1917:18;1909:26;;1945:71;2013:1;2002:9;1998:17;1989:6;1945:71;:::i;:::-;1801:222;;;;:::o;2029:329::-;2088:6;2137:2;2125:9;2116:7;2112:23;2108:32;2105:119;;;2143:79;;:::i;:::-;2105:119;2263:1;2288:53;2333:7;2324:6;2313:9;2309:22;2288:53;:::i;:::-;2278:63;;2234:117;2029:329;;;;:::o;2364:147::-;2465:11;2502:3;2487:18;;2364:147;;;;:::o;2517:114::-;;:::o;2637:398::-;2796:3;2817:83;2898:1;2893:3;2817:83;:::i;:::-;2810:90;;2909:93;2998:3;2909:93;:::i;:::-;3027:1;3022:3;3018:11;3011:18;;2637:398;;;:::o;3041:379::-;3225:3;3247:147;3390:3;3247:147;:::i;:::-;3240:154;;3411:3;3404:10;;3041:379;;;:::o;3426:118::-;3513:24;3531:5;3513:24;:::i;:::-;3508:3;3501:37;3426:118;;:::o;3550:222::-;3643:4;3681:2;3670:9;3666:18;3658:26;;3694:71;3762:1;3751:9;3747:17;3738:6;3694:71;:::i;:::-;3550:222;;;;:::o",
+    "linkReferences": {}
+  },
+  "methodIdentifiers": {
+    "owner()": "8da5cb5b",
+    "renounceOwnership()": "715018a6",
+    "sendETH(address,uint256)": "64a197f3",
+    "transferOwnership(address)": "f2fde38b"
+  },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.30+commit.73712a01\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"AquaDAOTreasury__ETHTransferFailed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"AquaDAOTreasury__NotEnoughETH\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"OwnableInvalidOwner\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"OwnableUnauthorizedAccount\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"ETHSent\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"}],\"name\":\"sendETH\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}],\"devdoc\":{\"author\":\"Kavinda Rathnayake\",\"details\":\"The AquaDAOTreasury contract is responsible for managing the funds of the Aqua DAO.This contract holds the funds of users paid when they buy the Aqua Governance Token.\",\"errors\":{\"OwnableInvalidOwner(address)\":[{\"details\":\"The owner is not a valid owner account. (eg. `address(0)`)\"}],\"OwnableUnauthorizedAccount(address)\":[{\"details\":\"The caller account is not authorized to perform an operation.\"}]},\"kind\":\"dev\",\"methods\":{\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner.\"},\"sendETH(address,uint256)\":{\"details\":\"Sends ETH from the treasury to a specified address.\",\"params\":{\"_amount\":\"The amount of ETH to send.\",\"_to\":\"The address to send ETH to.\"}},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"title\":\"Aqua Treasury\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"notice\":\"This contract implements the Aqua Treasury.\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/AquaDAOTreasury.sol\":\"AquaDAOTreasury\"},\"evmVersion\":\"prague\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/\",\":forge-std/=lib/forge-std/src/\",\":halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/\",\":openzeppelin-contracts/=lib/openzeppelin-contracts/\"]},\"sources\":{\"lib/openzeppelin-contracts/contracts/access/Ownable.sol\":{\"keccak256\":\"0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8ed324d3920bb545059d66ab97d43e43ee85fd3bd52e03e401f020afb0b120f6\",\"dweb:/ipfs/QmfEckWLmZkDDcoWrkEvMWhms66xwTLff9DDhegYpvHo1a\"]},\"lib/openzeppelin-contracts/contracts/utils/Context.sol\":{\"keccak256\":\"0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6a708e8a5bdb1011c2c381c9a5cfd8a9a956d7d0a9dc1bd8bcdaf52f76ef2f12\",\"dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF\"]},\"src/AquaDAOTreasury.sol\":{\"keccak256\":\"0x1877b87a9d6c25d6dbfe024a17f62f8af574ad667b5600f11daebadd50f33f49\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://9e7600cc413d0036d6350ee5589095f28b8944472c183d4ec433274a26a1bfad\",\"dweb:/ipfs/Qmac6WZnx4LMDmFryxZ8CKLpdZaKFxJqeCqd3Tz5euvSKT\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": { "version": "0.8.30+commit.73712a01" },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [],
+          "stateMutability": "nonpayable",
+          "type": "constructor"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "AquaDAOTreasury__ETHTransferFailed"
+        },
+        {
+          "inputs": [],
+          "type": "error",
+          "name": "AquaDAOTreasury__NotEnoughETH"
+        },
+        {
+          "inputs": [
+            { "internalType": "address", "name": "owner", "type": "address" }
+          ],
+          "type": "error",
+          "name": "OwnableInvalidOwner"
+        },
+        {
+          "inputs": [
+            { "internalType": "address", "name": "account", "type": "address" }
+          ],
+          "type": "error",
+          "name": "OwnableUnauthorizedAccount"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "to",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "ETHSent",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "previousOwner",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "newOwner",
+              "type": "address",
+              "indexed": true
+            }
+          ],
+          "type": "event",
+          "name": "OwnershipTransferred",
+          "anonymous": false
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "owner",
+          "outputs": [
+            { "internalType": "address", "name": "", "type": "address" }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "renounceOwnership"
+        },
+        {
+          "inputs": [
+            { "internalType": "address", "name": "_to", "type": "address" },
+            { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "sendETH"
+        },
+        {
+          "inputs": [
+            { "internalType": "address", "name": "newOwner", "type": "address" }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "transferOwnership"
+        },
+        { "inputs": [], "stateMutability": "payable", "type": "receive" }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {
+          "owner()": { "details": "Returns the address of the current owner." },
+          "renounceOwnership()": {
+            "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
+          },
+          "sendETH(address,uint256)": {
+            "details": "Sends ETH from the treasury to a specified address.",
+            "params": {
+              "_amount": "The amount of ETH to send.",
+              "_to": "The address to send ETH to."
+            }
+          },
+          "transferOwnership(address)": {
+            "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+          }
+        },
+        "version": 1
+      },
+      "userdoc": { "kind": "user", "methods": {}, "version": 1 }
+    },
+    "settings": {
+      "remappings": [
+        "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+        "erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/",
+        "forge-std/=lib/forge-std/src/",
+        "halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/",
+        "openzeppelin-contracts/=lib/openzeppelin-contracts/"
+      ],
+      "optimizer": { "enabled": false, "runs": 200 },
+      "metadata": { "bytecodeHash": "ipfs" },
+      "compilationTarget": { "src/AquaDAOTreasury.sol": "AquaDAOTreasury" },
+      "evmVersion": "prague",
+      "libraries": {}
+    },
+    "sources": {
+      "lib/openzeppelin-contracts/contracts/access/Ownable.sol": {
+        "keccak256": "0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb",
+        "urls": [
+          "bzz-raw://8ed324d3920bb545059d66ab97d43e43ee85fd3bd52e03e401f020afb0b120f6",
+          "dweb:/ipfs/QmfEckWLmZkDDcoWrkEvMWhms66xwTLff9DDhegYpvHo1a"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/utils/Context.sol": {
+        "keccak256": "0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2",
+        "urls": [
+          "bzz-raw://6a708e8a5bdb1011c2c381c9a5cfd8a9a956d7d0a9dc1bd8bcdaf52f76ef2f12",
+          "dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF"
+        ],
+        "license": "MIT"
+      },
+      "src/AquaDAOTreasury.sol": {
+        "keccak256": "0x1877b87a9d6c25d6dbfe024a17f62f8af574ad667b5600f11daebadd50f33f49",
+        "urls": [
+          "bzz-raw://9e7600cc413d0036d6350ee5589095f28b8944472c183d4ec433274a26a1bfad",
+          "dweb:/ipfs/Qmac6WZnx4LMDmFryxZ8CKLpdZaKFxJqeCqd3Tz5euvSKT"
+        ],
+        "license": "MIT"
+      }
+    },
+    "version": 1
+  },
+  "id": 28
+}
