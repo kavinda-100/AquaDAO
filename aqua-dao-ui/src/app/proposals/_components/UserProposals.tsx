@@ -5,6 +5,7 @@ import Link from "next/link";
 import { CreateAProposal } from "./CreateAProposal";
 import { useGetUserProposals } from "@/hooks/useGetUserProposals";
 import { useAccount } from "wagmi";
+import { ProposalDisplayCard } from "./ProposalDisplayCard";
 
 export const UserProposals = () => {
   const account = useAccount();
@@ -24,7 +25,15 @@ export const UserProposals = () => {
         {/* only show 3 proposals (with the button grid will be fill for 4) */}
         {isPending && <p>Loading...</p>}
         {isError && <p>Error: {error?.message}</p>}
-        {!isPending && !isError && <p>{proposals?.length}</p>}
+        {!isPending && !isError && proposals.length > 0 ? (
+          proposals
+            .slice(0, 3)
+            .map((proposal) => (
+              <ProposalDisplayCard key={proposal.id} {...proposal} />
+            ))
+        ) : (
+          <p>No proposals found</p>
+        )}
       </section>
     </section>
   );
