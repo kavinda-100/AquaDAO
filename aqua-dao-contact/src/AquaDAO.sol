@@ -224,6 +224,41 @@ contract AquaDAO {
     }
 
     /**
+     * @dev Returns an array of proposals created by a specific user.
+     * @param _user The address of the user whose proposals to retrieve.
+     */
+    function getUserProposals(address _user) external view returns (ProposalForDisplay[] memory) {
+        // First, count the number of proposals created by the user
+        uint256 userProposalCount = 0;
+        for (uint256 i = 0; i < allProposals.length; i++) {
+            if (proposals[allProposals[i]].proposer == _user) {
+                userProposalCount++;
+            }
+        }
+
+        // Create the user proposals array with the correct size
+        ProposalForDisplay[] memory userProposals = new ProposalForDisplay[](userProposalCount);
+        uint256 index = 0;
+
+        for (uint256 i = 0; i < allProposals.length; i++) {
+            if (proposals[allProposals[i]].proposer == _user) {
+                userProposals[index] = ProposalForDisplay({
+                    id: proposals[allProposals[i]].id,
+                    proposer: proposals[allProposals[i]].proposer,
+                    description: proposals[allProposals[i]].description,
+                    votesFor: proposals[allProposals[i]].votesFor,
+                    votesAgainst: proposals[allProposals[i]].votesAgainst,
+                    deadline: proposals[allProposals[i]].deadline,
+                    executed: proposals[allProposals[i]].executed,
+                    isProposalHasPassed: proposals[allProposals[i]].isProposalHasPassed
+                });
+                index++;
+            }
+        }
+        return userProposals;
+    }
+
+    /**
      * @dev Returns the total number of proposals.
      * @return The total number of proposals.
      */
