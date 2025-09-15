@@ -1,15 +1,19 @@
 "use client";
 
 import React from "react";
-import { PlusIcon } from "lucide-react";
+import { Loader2Icon, PlusIcon } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useWriteContract } from "wagmi";
+import AquaDaoABI from "@/abi/AquaDAO.json";
+import { AQUA_DAO_ADDRESS } from "@/abi";
 
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -34,7 +38,21 @@ const formSchema = z.object({
 });
 
 export const CreateAProposal = () => {
-  const [openProposalForm, setOpenProposalForm] = React.useState(false);
+  const [openProposalForm, setOpenProposalForm] = React.useState(false); // for create proposal form dialog
+  const [openFinalResultDialog, setOpenFinalResultDialog] =
+    React.useState(false); // for final result dialog
+  const [isCreatingProposalSuccess, setIsCreatingProposalSuccess] =
+    React.useState(false); // to check if creating proposal is success or not
+  const [creatingProposalError, setCreatingProposalError] = React.useState<
+    string | null
+  >(null); // to store error message
+
+  // wagmi write contract
+  const {
+    data: hash,
+    writeContract,
+    isPending: isCreatingProposal,
+  } = useWriteContract();
 
   const openProposalFormHandler = () => {
     setOpenProposalForm(true);
@@ -49,7 +67,29 @@ export const CreateAProposal = () => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    // handle form submission
+    writeContract(
+      {
+        address: AQUA_DAO_ADDRESS as `0x${string}`,
+        abi: AquaDaoABI.abi,
+        functionName: "createProposal",
+        args: [values.description, BigInt(values.duration)],
+      },
+      {
+        onSuccess() {
+          setOpenProposalForm(false);
+          setIsCreatingProposalSuccess(true);
+          setCreatingProposalError(null);
+          setOpenFinalResultDialog(true);
+        },
+        onError(error) {
+          setOpenProposalForm(false);
+          setIsCreatingProposalSuccess(false);
+          setCreatingProposalError(error?.message || "Something went wrong");
+          setOpenFinalResultDialog(true);
+        },
+      },
+    );
   }
 
   return (
@@ -88,6 +128,7 @@ export const CreateAProposal = () => {
                           rows={4}
                           placeholder="Enter a brief description"
                           {...field}
+                          disabled={isCreatingProposal}
                         />
                       </FormControl>
                       <FormDescription>
@@ -112,6 +153,7 @@ export const CreateAProposal = () => {
                           onChange={(e) =>
                             field.onChange(Number(e.target.value))
                           }
+                          disabled={isCreatingProposal}
                         />
                       </FormControl>
                       <FormDescription>
@@ -128,16 +170,66 @@ export const CreateAProposal = () => {
                     variant={"secondary"}
                     className="cursor-pointer"
                     onClick={() => setOpenProposalForm(false)}
+                    disabled={isCreatingProposal}
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="cursor-pointer">
-                    Create Proposal
+                  <Button
+                    type="submit"
+                    className="cursor-pointer"
+                    disabled={isCreatingProposal}
+                  >
+                    {isCreatingProposal ? (
+                      <Loader2Icon className="size-5 animate-spin" />
+                    ) : (
+                      "Create Proposal"
+                    )}
                   </Button>
                 </div>
               </form>
             </Form>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Final result dialog */}
+      <Dialog
+        open={openFinalResultDialog}
+        onOpenChange={setOpenFinalResultDialog}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {isCreatingProposalSuccess
+                ? "Proposal Created"
+                : "Proposal Creation Failed"}
+            </DialogTitle>
+          </DialogHeader>
+          <div>
+            <p>
+              {isCreatingProposalSuccess
+                ? "Your proposal has been created successfully."
+                : creatingProposalError}
+            </p>
+            {isCreatingProposalSuccess && hash && (
+              <p>
+                Transaction Hash:{" "}
+                <a
+                  href={`https://sepolia.etherscan.io/tx/${hash}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary underline"
+                >
+                  {hash.slice(0, 25)}...{hash.slice(-4)}
+                </a>
+              </p>
+            )}
+          </div>
+          <DialogFooter>
+            <Button onClick={() => setOpenFinalResultDialog(false)}>
+              Close
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
