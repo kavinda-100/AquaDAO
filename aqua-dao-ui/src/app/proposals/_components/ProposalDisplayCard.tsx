@@ -114,7 +114,7 @@ export const ProposalDisplayCard = ({
           <User className="text-muted-foreground h-4 w-4 flex-shrink-0" />
           <span className="text-muted-foreground">Proposed by:</span>
           <span className="bg-muted/50 truncate rounded border px-2 py-1 font-mono text-xs">
-            {proposer.slice(0, 6)}...{proposer.slice(-4)}
+            {proposer.slice(0, 12)}...{proposer.slice(-4)}
           </span>
         </div>
 
