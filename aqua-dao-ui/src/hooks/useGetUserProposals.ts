@@ -23,7 +23,20 @@ export function useGetUserProposals(userAddress: `0x${string}` | undefined) {
     abi: AquaDaoABI.abi,
     functionName: "getUserProposals",
     args: [userAddress],
+    query: {
+      enabled: !!userAddress, // only run the query if userAddress is defined
+    },
   });
+
+  // if userAddress is undefined, return empty array
+  if (!userAddress) {
+    return {
+      proposals: [] as ProposalType[],
+      isPending: false,
+      isError: false,
+      error: null,
+    };
+  }
 
   return { proposals: proposals as ProposalType[], isPending, isError, error };
 }
