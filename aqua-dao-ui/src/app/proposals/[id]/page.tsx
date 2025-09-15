@@ -6,6 +6,8 @@ import { useAccount, useReadContract } from "wagmi";
 import { AQUA_GOV_TOKEN_ADDRESS } from "@/abi";
 import AquaGovTokenABI from "@/abi/AquaGovToken.json";
 import { useGetProposalDetail } from "@/hooks/useGetProposalDetail";
+import { Vote } from "./_components/Vote";
+import { ExecuteTheProposal } from "./_components/ExecuteTheProposal";
 
 const ProposalDetailPage = () => {
   const params = useParams<{ id: string }>();
@@ -105,6 +107,12 @@ const ProposalDetailPage = () => {
           </>
         )}
       </div>
+
+      {/* Vote Component */}
+      <Vote />
+
+      {/* ExecuteTheProposal Component (Only Owner) */}
+      {account.address === proposal.proposer && <ExecuteTheProposal />}
     </section>
   );
 };
