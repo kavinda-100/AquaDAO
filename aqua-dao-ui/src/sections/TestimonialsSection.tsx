@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 // Type definitions
 interface Testimonial {
@@ -456,7 +457,9 @@ export const TestimonialsSection = () => {
                 animate={{ x: [-100, 100] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
               />
-              <span className="relative z-10">Start Your Journey</span>
+              <Link href={"/proposals/all"} className="relative z-10">
+                Start Your Journey
+              </Link>
             </motion.button>
 
             <motion.button

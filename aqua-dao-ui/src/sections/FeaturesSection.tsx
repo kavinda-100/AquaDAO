@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 // Custom SVG Components for Features
 const TransparencyIcon = ({ className }: { className?: string }) => (
@@ -560,7 +561,9 @@ export const FeaturesSection = () => {
                 animate={{ x: [-100, 100] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
               />
-              <span className="relative z-10">Start Governing Today</span>
+              <Link href={"/proposals/all"} className="relative z-10">
+                Start Governing Today
+              </Link>
             </motion.button>
 
             <motion.button
