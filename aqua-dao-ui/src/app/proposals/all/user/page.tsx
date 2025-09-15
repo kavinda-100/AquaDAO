@@ -10,6 +10,7 @@ import {
   Loader2,
   User,
   Vote,
+  Wallet,
 } from "lucide-react";
 import { useGetUserProposals } from "@/hooks/useGetUserProposals";
 import { ProposalDisplayCard } from "../../_components/ProposalDisplayCard";
@@ -19,6 +20,62 @@ const UserProposals = () => {
   const { proposals, isPending, isError, error } = useGetUserProposals(
     account.address,
   );
+
+  // if the user is not connected, show a message
+  if (!account.isConnected) {
+    return (
+      <section className="from-background via-background/95 to-primary/5 relative h-screen w-full rounded-xl bg-gradient-to-br p-6 lg:p-8">
+        <div className="flex flex-col items-center justify-center space-y-6 py-20">
+          {/* Wallet Icon Container */}
+          <div className="from-primary/20 border-primary/30 flex h-24 w-24 items-center justify-center rounded-full border-4 bg-gradient-to-br to-blue-500/20">
+            <Wallet className="text-primary h-12 w-12" />
+          </div>
+
+          {/* Main Message */}
+          <div className="max-w-md space-y-3 text-center">
+            <h2 className="from-primary bg-gradient-to-r to-blue-500 bg-clip-text text-3xl font-bold text-transparent">
+              Connect Your Wallet
+            </h2>
+            <p className="text-muted-foreground text-lg">
+              Please connect your wallet to view and manage your governance
+              proposals
+            </p>
+            <p className="text-muted-foreground/80 text-sm">
+              Your wallet connection is required to access personalized proposal
+              data and participate in DAO governance.
+            </p>
+          </div>
+
+          {/* Information Cards */}
+          <div className="mt-8 grid w-full max-w-2xl grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="bg-muted/30 border-border/50 flex flex-col items-center space-y-2 rounded-lg border p-4">
+              <User className="text-primary h-8 w-8" />
+              <h3 className="text-sm font-semibold">Your Proposals</h3>
+              <p className="text-muted-foreground text-center text-xs">
+                View and track all your submitted governance proposals
+              </p>
+            </div>
+
+            <div className="bg-muted/30 border-border/50 flex flex-col items-center space-y-2 rounded-lg border p-4">
+              <Vote className="h-8 w-8 text-green-600" />
+              <h3 className="text-sm font-semibold">Create Proposals</h3>
+              <p className="text-muted-foreground text-center text-xs">
+                Submit new proposals to shape the future of AquaDAO
+              </p>
+            </div>
+
+            <div className="bg-muted/30 border-border/50 flex flex-col items-center space-y-2 rounded-lg border p-4">
+              <FileText className="h-8 w-8 text-blue-600" />
+              <h3 className="text-sm font-semibold">Manage Governance</h3>
+              <p className="text-muted-foreground text-center text-xs">
+                Participate in decentralized decision making
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="from-background via-background/95 to-primary/5 relative w-full space-y-8 rounded-xl bg-gradient-to-br p-6 lg:p-8">
