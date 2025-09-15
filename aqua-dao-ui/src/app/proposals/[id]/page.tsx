@@ -109,10 +109,14 @@ const ProposalDetailPage = () => {
       </div>
 
       {/* Vote Component */}
-      <Vote id={BigInt(params.id)} address={account.address!} />
+      {account.isConnected && proposal && (
+        <>
+          <Vote id={BigInt(params.id)} address={account.address!} />
 
-      {/* ExecuteTheProposal Component (Only Owner) */}
-      {account.address === proposal.proposer && <ExecuteTheProposal />}
+          {/* ExecuteTheProposal Component (Only Owner) */}
+          {account.address === proposal.proposer && <ExecuteTheProposal />}
+        </>
+      )}
     </section>
   );
 };

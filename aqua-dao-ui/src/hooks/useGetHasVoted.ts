@@ -16,6 +16,7 @@ export function useGetHasVoted({
     isPending,
     isError,
     error,
+    refetch,
   } = useReadContract({
     address: AQUA_DAO_ADDRESS as `0x${string}`,
     abi: AquaDaoABI.abi,
@@ -23,5 +24,5 @@ export function useGetHasVoted({
     args: [id, account],
   });
 
-  return { hasVoted: hasVoted as boolean, isPending, isError, error };
+  return { hasVoted: hasVoted as boolean, isPending, isError, error, refetch };
 }
