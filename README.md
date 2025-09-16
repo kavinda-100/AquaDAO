@@ -13,7 +13,7 @@
 
 **A modern, fully-decentralized autonomous organization platform that empowers communities to make collective decisions through transparent, on-chain governance.**
 
-[🚀 Live Demo](https://aqua-dao.vercel.app) • [📖 Documentation](#documentation) • [🛠️ Installation](#quick-start) • [💬 Community](#community)
+[🚀 Live Demo](https://aqua-dao.vercel.app) • [� Screenshots](./SCREENSHOTS.md) • [�📖 Documentation](#documentation) • [🛠️ Installation](#quick-start) • [💬 Community](#community)
 
 </div>
 
@@ -118,6 +118,10 @@ AquaDAO consists of two main components:
 - **Responsive Design** - Mobile-first approach with dark mode support
 - **Type Safety** - Full TypeScript implementation
 
+### 🌆 Screenshots
+
+[Screenshots Gallery](./SCREENSHOTS.md)
+
 ---
 
 ## 🚀 Quick Start
@@ -173,7 +177,8 @@ Visit `http://localhost:3000` to see your local AquaDAO instance! 🎉
 
 | Component               | Description                                       | Link                                           |
 | ----------------------- | ------------------------------------------------- | ---------------------------------------------- |
-| 🔗 **Smart Contracts**  | Solidity contracts, tests, and deployment scripts | [Backend README](./aqua-dao-contact/README.md) |
+| � **Screenshots**       | Visual showcase of the AquaDAO interface          | [Interface Gallery](./SCREENSHOTS.md)          |
+| �🔗 **Smart Contracts** | Solidity contracts, tests, and deployment scripts | [Backend README](./aqua-dao-contact/README.md) |
 | 🎨 **Frontend dApp**    | Next.js application with Web3 integration         | [Frontend README](./aqua-dao-ui/README.md)     |
 | 🏛️ **Governance Guide** | How to create proposals and vote                  | Coming Soon                                    |
 | 🏦 **Treasury Guide**   | Managing community funds                          | Coming Soon                                    |
