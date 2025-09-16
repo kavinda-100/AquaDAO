@@ -386,7 +386,7 @@ const ProposalDetailPage = () => {
             )}
 
             {/* ExecuteTheProposal Component (Only Owner) */}
-            {account.address === proposal.proposer && (
+            {proposal && account.address === proposal.proposer && (
               <div className="bg-card/50 border-border/50 rounded-xl border p-6 backdrop-blur-sm">
                 <div className="mb-4 flex items-center gap-3">
                   <div className="bg-primary/10 flex h-8 w-8 items-center justify-center rounded-lg">
@@ -396,7 +396,12 @@ const ProposalDetailPage = () => {
                     Proposal Actions
                   </h3>
                 </div>
-                <ExecuteTheProposal />
+                <ExecuteTheProposal
+                  id={BigInt(params.id)}
+                  voteFor={proposal.votesFor}
+                  voteAgainst={proposal.votesAgainst}
+                  isExecuted={proposal.executed}
+                />
               </div>
             )}
           </div>
