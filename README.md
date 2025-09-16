@@ -1,228 +1,231 @@
 # 🌊 AquaDAO - Decentralized Autonomous Organization
 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Solidity](https://img.shields.io/badge/Solidity-0.8.24-363636.svg)](https://soliditylang.org/)
-[![Foundry](https://img.shields.io/badge/Built%20with-Foundry-000000.svg)](https://getfoundry.sh/)
-[![React](https://img.shields.io/badge/Frontend-React%20%7C%20Next.js-61DAFB.svg)](https://reactjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC.svg)](https://www.typescriptlang.org/)
-
-> **AquaDAO** is a modern, fully-decentralized autonomous organization platform that empowers communities to make collective decisions through transparent, on-chain governance.
-
 <div align="center">
   <img src="imgs/logo.png" alt="AquaDAO Logo" width="200"/>
+  
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+  [![Solidity](https://img.shields.io/badge/Solidity-^0.8.24-363636?logo=solidity)](https://soliditylang.org/)
+  [![Foundry](https://img.shields.io/badge/Built%20with-Foundry-black?logo=ethereum)](https://getfoundry.sh/)
+  [![Next.js](https://img.shields.io/badge/Next.js-15.2.3-black?logo=next.js)](https://nextjs.org/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)](https://www.typescriptlang.org/)
+  [![Wagmi](https://img.shields.io/badge/Wagmi-2.16.9-ff6b6b?logo=ethereum)](https://wagmi.sh/)
+  [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4-06B6D4?logo=tailwindcss)](https://tailwindcss.com/)
+
+**A modern, fully-decentralized autonomous organization platform that empowers communities to make collective decisions through transparent, on-chain governance.**
+
+[🚀 Live Demo](https://aqua-dao.vercel.app) • [📖 Documentation](#documentation) • [🛠️ Installation](#quick-start) • [💬 Community](#community)
+
 </div>
 
-## 🌟 What is AquaDAO?
+---
 
-AquaDAO is a complete DAO ecosystem that combines powerful smart contracts with an intuitive user interface. It enables any community to:
+## 🌟 Overview
 
-- **Create Proposals** for community decisions
-- **Vote Democratically** using governance tokens
-- **Manage Treasury** funds securely and transparently
-- **Execute Decisions** automatically based on voting outcomes
+AquaDAO is a complete DAO ecosystem that combines powerful Solidity smart contracts with an intuitive Next.js frontend. Built for the modern Web3 era, it provides everything needed to establish and operate a decentralized autonomous organization.
 
-## 🚀 Key Features
+### ✨ What Makes AquaDAO Special?
 
-### 🗳️ **Governance & Voting**
+- 🏛️ **Complete Governance System** - From proposal creation to execution
+- 💎 **Fair Tokenomics** - Simple and transparent token distribution
+- 🏦 **Secure Treasury** - Community-controlled fund management
+- 🎨 **Beautiful UI/UX** - Modern, responsive interface with dark mode
+- 🔐 **Security First** - Comprehensive test coverage and audit-ready code
+- 🌐 **Production Ready** - Deployed and tested on Ethereum testnets
 
-- **Decentralized Proposals**: Anyone can create proposals for community consideration
-- **Token-Based Voting**: Democratic voting weighted by governance token holdings
-- **Flexible Voting Periods**: Customizable proposal duration (days/weeks)
-- **Transparent Execution**: Successful proposals executed on-chain
+---
 
-### 💎 **Tokenomics**
+## 🎯 Key Features
 
-- **AQUA Governance Token**: ERC20 token for voting rights
-- **Simple Minting**: Acquire tokens by paying ETH (1 wei = 1 token)
-- **Treasury Funding**: All minting fees flow directly to DAO treasury
-- **Fair Distribution**: Open minting ensures equitable access
+<div align="center">
+  <table>
+    <tr>
+      <td align="center" width="33%">
+        <img src="https://img.icons8.com/color/96/000000/voting-box.png" width="60"/><br/>
+        <b>🗳️ Democratic Governance</b><br/>
+        Token-weighted voting with transparent proposal system
+      </td>
+      <td align="center" width="33%">
+        <img src="https://img.icons8.com/color/96/000000/ethereum.png" width="60"/><br/>
+        <b>💎 AQUA Token</b><br/>
+        ERC20 governance token with simple 1:1 ETH minting
+      </td>
+      <td align="center" width="33%">
+        <img src="https://img.icons8.com/color/96/000000/treasury.png" width="60"/><br/>
+        <b>🏦 Treasury Management</b><br/>
+        Secure, community-controlled fund management
+      </td>
+    </tr>
+  </table>
+</div>
 
-### 🏦 **Treasury Management**
+### 🏛️ **Governance Features**
 
-- **Secure Fund Storage**: Multi-signature controlled treasury
-- **Transparent Operations**: All fund movements recorded on-chain
-- **Controlled Disbursement**: Only authorized personnel can move funds
-- **Community Oversight**: Treasury activities visible to all members
+- ✅ **Proposal Creation** - Submit proposals for community voting
+- ✅ **Democratic Voting** - One token, one vote system
+- ✅ **Execution Engine** - Automatic execution of passed proposals
+- ✅ **Time-bound Voting** - Configurable voting periods
+- ✅ **Proposal States** - Active, Executed, Failed status tracking
 
-### 📊 **Analytics & Insights**
+### 💎 **Token Economics**
 
-- **Real-time Governance Data**: Live proposal and voting statistics
-- **Historical Records**: Complete audit trail of all DAO activities
-- **Member Analytics**: Individual voting history and participation
-- **Treasury Metrics**: Fund flow tracking and allocation insights
+- ✅ **Fair Distribution** - Open minting at 1 wei per token
+- ✅ **Governance Rights** - Voting power proportional to holdings
+- ✅ **Treasury Funding** - All minting fees go to community treasury
+- ✅ **ERC20 Standard** - Full compatibility with DeFi ecosystem
+
+### 🏦 **Treasury System**
+
+- ✅ **Secure Storage** - Multi-signature controlled funds
+- ✅ **Transparent Operations** - All movements recorded on-chain
+- ✅ **Community Oversight** - Public visibility of all activities
+- ✅ **Controlled Access** - Only authorized operations allowed
+
+---
 
 ## 🏗️ Architecture
 
-AquaDAO is built with a modern, modular architecture:
+AquaDAO consists of two main components:
 
-```
-┌─────────────────────┐    ┌─────────────────────┐
-│      Frontend       │    │    Smart Contracts  │
-│                     │    │                     │
-│ • React.js          │◄──►│ • AquaDAO.sol       │
-│ • Next.js           │    │ • AquaGovToken.sol  │
-│ • TypeScript        │    │ • AquaDAOTreasury   │
-│ • TailwindCSS       │    │                     │
-│ • Wagmi             │    │ Built with Foundry  │
-│ • RainbowKit        │    │ Deployed on Ethereum│
-└─────────────────────┘    └─────────────────────┘
-```
+<div align="center">
+  <table>
+    <tr>
+      <td align="center" width="50%">
+        <img src="https://img.icons8.com/color/96/000000/blockchain-technology.png" width="60"/><br/>
+        <b>🔗 Smart Contracts</b><br/>
+        <i>Solidity + Foundry</i><br/>
+        <a href="./aqua-dao-contact/README.md">📚 Backend Documentation →</a>
+      </td>
+      <td align="center" width="50%">
+        <img src="https://img.icons8.com/color/96/000000/react-native.png" width="60"/><br/>
+        <b>🎨 Frontend dApp</b><br/>
+        <i>Next.js + TypeScript + Wagmi</i><br/>
+        <a href="./aqua-dao-ui/README.md">📚 Frontend Documentation →</a>
+      </td>
+    </tr>
+  </table>
+</div>
 
-## 📁 Project Structure
+### � Smart Contracts Overview
 
-```
-AquaDAO/
-├── 📁 aqua-dao-contact/          # Smart contracts (Backend)
-│   ├── 📁 src/                   # Contract source code
-│   ├── 📁 test/                  # Comprehensive test suite
-│   ├── 📁 script/                # Deployment scripts
-│   └── 📄 README.md              # Backend documentation
-│
-├── 📁 frontend/                  # React frontend (Coming Soon)
-│   ├── 📁 src/                   # Frontend source code
-│   ├── 📁 components/            # Reusable UI components
-│   ├── 📁 pages/                 # Next.js pages
-│   └── 📄 README.md              # Frontend documentation
-│
-├── 📁 imgs/                      # Project assets
-└── 📄 README.md                  # This file
-```
+- **AquaDAO.sol** - Main governance contract
+- **AquaGovToken.sol** - ERC20 governance token
+- **AquaDAOTreasury.sol** - Treasury management
 
-## 🛠️ Technology Stack
+### 🎨 Frontend Overview
 
-### **Backend (Smart Contracts)**
+- **Modern UI** - Built with Next.js 15 and Tailwind CSS
+- **Web3 Integration** - Wagmi v2 for seamless blockchain interaction
+- **Responsive Design** - Mobile-first approach with dark mode support
+- **Type Safety** - Full TypeScript implementation
 
-- **Solidity** - Smart contract development
-- **Foundry** - Development framework and testing
-- **OpenZeppelin** - Secure contract libraries
-- **Ethereum** - Blockchain platform
-
-### **Frontend (Coming Soon)**
-
-- **React.js** - User interface library
-- **Next.js** - Full-stack React framework
-- **TypeScript** - Type-safe JavaScript
-- **TailwindCSS** - Utility-first CSS framework
-- **Wagmi** - Ethereum React hooks
-- **RainbowKit** - Wallet connection UI
+---
 
 ## 🚀 Quick Start
 
-### 1. Clone the Repository
+### 📋 Prerequisites
+
+- **Node.js** v18+ and npm/bun
+- **Foundry** for smart contract development
+- **MetaMask** or compatible Web3 wallet
+- **Git** for cloning the repository
+
+### ⚡ Installation
 
 ```bash
+# Clone the repository
 git clone https://github.com/kavinda-100/AquaDAO.git
 cd AquaDAO
-```
 
-### 2. Smart Contracts Setup
-
-```bash
+# Install backend dependencies
 cd aqua-dao-contact
-forge install
-forge build
-forge test
+make install
+
+# Install frontend dependencies
+cd ../aqua-dao-ui
+bun install # or npm install
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your configuration
 ```
 
-### 3. Deploy Contracts (Local)
+### 🔧 Development Setup
 
 ```bash
-# Start local blockchain
-anvil
+# Terminal 1: Start Anvil local blockchain
+cd aqua-dao-contact
+make persist-state-dump
 
-# Deploy contracts
-isDev=true forge script script/DeployAquaDAO.s.sol --rpc-url http://127.0.0.1:8545 --private-key <private_key> --broadcast
+# Terminal 2: Deploy smart contracts
+cd aqua-dao-contact
+make deploy-local
+
+# Terminal 3: Start frontend development server
+cd aqua-dao-ui
+bun dev # or npm run dev
 ```
 
-### 4. Frontend Setup (Coming Soon)
+Visit `http://localhost:3000` to see your local AquaDAO instance! 🎉
 
-```bash
-cd frontend
-bun install
-bun run dev
-```
+---
 
 ## 📖 Documentation
 
-| Component           | Description                            | Link                                                       |
-| ------------------- | -------------------------------------- | ---------------------------------------------------------- |
-| **Smart Contracts** | Backend contracts, deployment, testing | [📄 Backend README](./aqua-dao-contact/README.md)          |
-| **Frontend**        | UI components, pages, integration      | [📄 Frontend README](./frontend/README.md) _(Coming Soon)_ |
-| **API Reference**   | Contract methods and events            | [📚 API Docs](./docs/api.md) _(Coming Soon)_               |
+| Component               | Description                                       | Link                                           |
+| ----------------------- | ------------------------------------------------- | ---------------------------------------------- |
+| 🔗 **Smart Contracts**  | Solidity contracts, tests, and deployment scripts | [Backend README](./aqua-dao-contact/README.md) |
+| 🎨 **Frontend dApp**    | Next.js application with Web3 integration         | [Frontend README](./aqua-dao-ui/README.md)     |
+| 🏛️ **Governance Guide** | How to create proposals and vote                  | Coming Soon                                    |
+| 🏦 **Treasury Guide**   | Managing community funds                          | Coming Soon                                    |
+| 🔐 **Security Guide**   | Best practices and audit results                  | Coming Soon                                    |
 
-## 🧪 Testing & Coverage
+---
 
-AquaDAO maintains high code quality with comprehensive testing:
+## 🌐 Deployment
 
-- ✅ **Unit Tests**: All contract functions tested
-- ✅ **Fuzz Tests**: Property-based testing for security
-- ✅ **Integration Tests**: End-to-end workflow validation
-- ✅ **98%+ Coverage**: Lines, statements, and branches
+### 🧪 Testnets
+
+- **Anvil Testnet** - Primary testing environment
+- **Sepolia Testnet** - Secondary testing environment
+
+### 🏭 Mainnet
+
+- **Ethereum Mainnet** - Production deployment (coming soon)
+
+### 📊 Contract Addresses
+
+Check the [deployment summary](./aqua-dao-contact/deployment-summary.json) for current contract addresses.
+
+---
+
+## 🧪 Testing
 
 ```bash
-# Run all tests
-cd aqua-dao-contact && forge test
-
-# Generate coverage report
-forge coverage
+# Run smart contract tests
+cd aqua-dao-contact
+forge test
 ```
 
-## 🔧 Development
-
-### Prerequisites
-
-- [Node.js](https://nodejs.org/) v18+
-- [Bun.js](https://bun.sh/)
-- [Foundry](https://getfoundry.sh/)
-- [Git](https://git-scm.com/)
-
-## 🛡️ Security
-
-AquaDAO prioritizes security:
-
-- **Audited Contracts**: Comprehensive testing and review
-- **Best Practices**: Following Solidity security patterns
-- **Access Controls**: Proper permission management
-- **Transparent Operations**: All activities on-chain
-
-⚠️ **Note**: This is experimental software. Always audit before mainnet deployment.
-
-## 🗺️ Roadmap
-
-### Phase 1: Core DAO ✅
-
-- [x] Smart contract development
-- [x] Comprehensive testing
-- [x] Deployment scripts
-
-### Phase 2: Frontend 🚧
-
-- [ ] React.js user interface
-- [ ] Wallet integration (RainbowKit)
-- [ ] Real-time updates
-- [ ] Responsive design
-
-## 📊 Stats
-
-- **Smart Contracts**: 3 core contracts
-- **Test Coverage**: 98%+
-- **Gas Optimized**: Efficient contract design
-- **Security Focused**: Best practice implementation
+---
 
 ## 📄 License
 
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
 
 ## 🙏 Acknowledgments
 
-- **OpenZeppelin** for secure smart contract libraries
-- **Foundry** for excellent development tools
-- **Ethereum** community for continuous innovation
-- **React** and **Next.js** teams for amazing frontend tools
+- **OpenZeppelin** - Security-focused smart contract libraries
+- **Foundry** - Fast and flexible Ethereum development toolkit
+- **Next.js** - The React framework for production
+- **Wagmi** - React hooks for Ethereum
+- **Tailwind CSS** - Utility-first CSS framework
+- **Lucide React** - Beautiful and consistent icon library
 
 ---
 
 <div align="center">
-  <p><strong>Built with ❤️ for the decentralized future</strong></p>
-  <p><em>AquaDAO - Where communities make decisions together</em></p>
+  <b>Built with ❤️ by <a href="https://github.com/kavinda-100">Kavinda Rathnayake</a></b><br/>
+  <i>Making decentralized governance accessible to everyone</i>
 </div>
