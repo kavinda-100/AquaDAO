@@ -255,18 +255,13 @@ All deployments are automatically logged in `deployment-summary.json`:
 
 ```json
 {
-  "network": "sepolia",
-  "timestamp": "2025-09-16T10:30:00Z",
-  "contracts": {
-    "AquaDAOTreasury": "0x...",
-    "AquaGovToken": "0x...",
-    "AquaDAO": "0x..."
-  },
-  "transactionHashes": {
-    "AquaDAOTreasury": "0x...",
-    "AquaGovToken": "0x...",
-    "AquaDAO": "0x..."
-  }
+  "aqua_dao_address": "0x...",
+  "aqua_dao_treasury_address": "0x...",
+  "aqua_gov_token_address": "0x...",
+  "block_number": 0,
+  "chain_id": 31337,
+  "deployment_timestamp": 1757914692,
+  "status": "deployed_successfully"
 }
 ```
 
